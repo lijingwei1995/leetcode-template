@@ -28,7 +28,7 @@
     <h1>哈希映射</h1>
     <p class="lede">用空间换时间，把“找配对”变成 O(1)。</p>
     <div class="meta-row">
-      <span class="pill pill-plain">3 道题</span>
+      <span class="pill pill-plain">15 道题</span>
       <span class="pill pill-plain">O(n) 时间，O(n) 空间</span>
     </div>
   </header>
@@ -38,7 +38,7 @@
       <section>
         <h2>核心思路</h2>
         <p class="lead-p">遍历时把已经见过的信息存入哈希表，查询当前元素需要的配对。先想清楚 key 与 value 的语义：值→下标、字符→字符、规范形→分组。</p>
-        <div class="callout"><span class="callout-mark">!</span><p>本模板在题库中关联 3 道题，其中 2 道以它为主模板。先判断题型，再动手写代码。</p></div>
+        <div class="callout"><span class="callout-mark">!</span><p>本模板在题库中关联 15 道题，其中 9 道以它为主模板。先判断题型，再动手写代码。</p></div>
       </section>
 
       <section>
@@ -63,8 +63,8 @@
 
       <section>
         <h2>适用题目</h2>
-        <div class="role-block"><span class="role-label">主模板 · 2 题</span><div class="mini-list"><a class="mini-row" href="../problems/roman-to-integer.html"><span class="mini-no">17</span><span class="mini-title">罗马数字转整数</span><span class="pill pill-easy">简单</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/max-points-on-a-line.html"><span class="mini-no">136</span><span class="mini-title">直线上最多的点数</span><span class="pill pill-hard">困难</span><span class="mini-role">主模板</span></a></div></div>
-        <div class="role-block"><span class="role-label">作为相关模板 · 1 题</span><div class="mini-list"><a class="mini-row" href="../problems/insert-delete-getrandom-o1.html"><span class="mini-no">12</span><span class="mini-title">O(1) 时间插入、删除和获取随机元素</span><span class="pill pill-medium">中等</span><span class="mini-role">相关</span></a></div></div>
+        <div class="role-block"><span class="role-label">主模板 · 9 题</span><div class="mini-list"><a class="mini-row" href="../problems/roman-to-integer.html"><span class="mini-no">17</span><span class="mini-title">罗马数字转整数</span><span class="pill pill-easy">简单</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/valid-sudoku.html"><span class="mini-no">34</span><span class="mini-title">有效的数独</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/isomorphic-strings.html"><span class="mini-no">40</span><span class="mini-title">同构字符串</span><span class="pill pill-easy">简单</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/word-pattern.html"><span class="mini-no">41</span><span class="mini-title">单词规律</span><span class="pill pill-easy">简单</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/group-anagrams.html"><span class="mini-no">43</span><span class="mini-title">字母异位词分组</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/two-sum.html"><span class="mini-no">44</span><span class="mini-title">两数之和</span><span class="pill pill-easy">简单</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/longest-consecutive-sequence.html"><span class="mini-no">47</span><span class="mini-title">最长连续序列</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/copy-list-with-random-pointer.html"><span class="mini-no">60</span><span class="mini-title">随机链表的复制</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/max-points-on-a-line.html"><span class="mini-no">136</span><span class="mini-title">直线上最多的点数</span><span class="pill pill-hard">困难</span><span class="mini-role">主模板</span></a></div></div>
+        <div class="role-block"><span class="role-label">作为相关模板 · 6 题</span><div class="mini-list"><a class="mini-row" href="../problems/insert-delete-getrandom-o1.html"><span class="mini-no">12</span><span class="mini-title">O(1) 时间插入、删除和获取随机元素</span><span class="pill pill-medium">中等</span><span class="mini-role">相关</span></a><a class="mini-row" href="../problems/happy-number.html"><span class="mini-no">45</span><span class="mini-title">快乐数</span><span class="pill pill-easy">简单</span><span class="mini-role">相关</span></a><a class="mini-row" href="../problems/contains-duplicate-ii.html"><span class="mini-no">46</span><span class="mini-title">存在重复元素 II</span><span class="pill pill-easy">简单</span><span class="mini-role">相关</span></a><a class="mini-row" href="../problems/lru-cache.html"><span class="mini-no">67</span><span class="mini-title">LRU 缓存</span><span class="pill pill-medium">中等</span><span class="mini-role">相关</span></a><a class="mini-row" href="../problems/clone-graph.html"><span class="mini-no">91</span><span class="mini-title">克隆图</span><span class="pill pill-medium">中等</span><span class="mini-role">相关</span></a><a class="mini-row" href="../problems/evaluate-division.html"><span class="mini-no">92</span><span class="mini-title">除法求值</span><span class="pill pill-medium">中等</span><span class="mini-role">相关</span></a></div></div>
       </section>
 
       <section>
@@ -79,8 +79,8 @@
         <dl class="rail-dl">
           <div><dt>分组</dt><dd>哈希·字符串·矩阵</dd></div>
           <div><dt>复杂度</dt><dd>O(n) 时间，O(n) 空间</dd></div>
-          <div><dt>主模板</dt><dd>2 题</dd></div>
-          <div><dt>相关引用</dt><dd>1 题</dd></div>
+          <div><dt>主模板</dt><dd>9 题</dd></div>
+          <div><dt>相关引用</dt><dd>6 题</dd></div>
         </dl>
       </div>
       <div class="rail-card">

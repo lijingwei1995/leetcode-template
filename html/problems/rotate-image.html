@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>旋转图像 · LeetCode 模板手册</title>
+<meta name="description" content="给定一个 n × n 的二维矩阵 matrix 表示一幅图像，请你将图像顺时针旋转 90 度。必须在原地旋转图像，即直接修改输入的二维矩阵，不要使用另一个矩阵来旋转图像。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b1f1d'/%3E%3Cpath d='M9 9h14M16 9v14' stroke='%23f0ead9' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="LeetCode 模板手册">
+      <span class="brand-mark"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-text">模板<span class="dot">·</span>LEETCODE</span>
+    </a>
+    <nav class="nav"><a class="nav-link active" href="../index.html">题库导航</a><a class="nav-link" href="../templates.html">模板手册</a>
+      <a class="nav-link nav-ext" href="../../%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8%20150%20%E9%A2%98%20-%20%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92%20-%20%E5%8A%9B%E6%89%A3%EF%BC%88LeetCode%EF%BC%89%E5%85%A8%E7%90%83%E6%9E%81%E5%AE%A2%E6%8C%9A%E7%88%B1%E7%9A%84%E6%8A%80%E6%9C%AF%E6%88%90%E9%95%BF%E5%B9%B3%E5%8F%B0.html" target="_blank" rel="noopener">原题计划 <span class="up">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container crumbs"><a href="../index.html">题库导航</a><span>/</span>矩阵<span>/</span><span>旋转图像</span></div>
+
+  <header class="container page-head">
+    <p class="page-kicker">No.36 · 矩阵</p>
+    <h1>旋转图像</h1>
+    <div class="meta-row">
+      <span class="pill pill-medium">中等</span>
+      <a class="meta-link" href="https://leetcode.cn/problems/rotate-image/" target="_blank" rel="noopener">LeetCode 原题 <span class="up">↗</span></a>
+    </div>
+    <div class="tpl-row"><a class="tpl-block" href="../templates/matrix-simulation.html"><span class="tpl-block-role">主模板</span><strong>矩阵模拟</strong><span class="arrow">→</span></a></div>
+  </header>
+
+  <div class="container problem-layout">
+    <article class="prose">
+      <section id="statement">
+        <h2>题目</h2>
+        <p class="statement-p">给定一个 n × n 的二维矩阵 matrix 表示一幅图像，请你将图像顺时针旋转 90 度。必须在原地旋转图像，即直接修改输入的二维矩阵，不要使用另一个矩阵来旋转图像。</p>
+        <div class="examples"><div class="example"><div class="ex-head">示例 1</div><div class="ex-row"><span>输入</span><code>matrix = [[1,2,3],[4,5,6],[7,8,9]]</code></div><div class="ex-row"><span>输出</span><code>返回 null，matrix 变为 [[7,4,1],[8,5,2],[9,6,3]]</code></div></div><div class="example"><div class="ex-head">示例 2</div><div class="ex-row"><span>输入</span><code>matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]</code></div><div class="ex-row"><span>输出</span><code>返回 null，matrix 变为 [[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]</code></div></div></div>
+      </section>
+
+      <section id="idea">
+        <h2>思路</h2>
+        <p class="lead-p">原地旋转 90° 是矩阵模拟的坐标变换信号：顺时针旋转 90° 等价于先沿主对角线转置、再把每一行左右翻转，两步都能原地完成。变化点在转置只遍历上三角（j 从 i+1 开始），全矩阵交换会互相抵消。</p>
+        <div class="path-line">
+          <span class="path-step">识别信号</span><i>→</i>
+          <span class="path-step">套用模板</span><i>→</i>
+          <span class="path-step">调整变化点</span>
+        </div>
+      </section>
+
+      <section id="code">
+        <h2>模板解法</h2>
+        <div class="code-card">
+          <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-lang">Python 3</span><button class="copy-btn" data-copy type="button">复制代码</button></div>
+          <pre class="code-body"><span class="cl"><span class="ln">1</span><span class="lt"><span class="tok-kw">class</span> Solution:</span></span><span class="cl"><span class="ln">2</span><span class="lt">    <span class="tok-kw">def</span> <span class="tok-fn">rotate</span>(self, matrix):</span></span><span class="cl"><span class="ln">3</span><span class="lt">        n = <span class="tok-bi">len</span>(matrix)</span></span><span class="cl"><span class="ln">4</span><span class="lt">        <span class="tok-kw">for</span> i <span class="tok-kw">in</span> <span class="tok-bi">range</span>(n):</span></span><span class="cl"><span class="ln">5</span><span class="lt">            <span class="tok-kw">for</span> j <span class="tok-kw">in</span> <span class="tok-bi">range</span>(i + <span class="tok-num">1</span>, n):</span></span><span class="cl hl"><span class="ln">6</span><span class="lt">                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]     <span class="tok-cmt"># 变化点: 沿主对角线转置，只走上三角</span></span></span><span class="cl"><span class="ln">7</span><span class="lt">        <span class="tok-kw">for</span> row <span class="tok-kw">in</span> matrix:</span></span><span class="cl hl"><span class="ln">8</span><span class="lt">            row.<span class="tok-fn">reverse</span>()                           <span class="tok-cmt"># 变化点: 再逐行左右翻转，得到顺时针 90°</span></span></span></pre>
+        </div>
+        <h3 class="sub-h">变化点代码</h3>
+        <ul class="var-list"><li><span class="v-line">L6</span><p>沿主对角线转置，只走上三角</p></li><li><span class="v-line">L8</span><p>再逐行左右翻转，得到顺时针 90°</p></li></ul>
+      </section>
+
+      <section id="pitfalls">
+        <h2>易错点</h2>
+        <ul class="pitfall-list"><li><span>01</span><p>转置只能遍历上三角，j 从 0 开始会让每个元素被交换两次、矩阵回到原样</p></li><li><span>02</span><p>顺序必须是先转置后左右翻转；先翻转再转置得到的是逆时针旋转</p></li><li><span>03</span><p>题目要求原地操作，不能用新建矩阵接住结果再赋值回去</p></li></ul>
+      </section>
+
+      <section id="complexity">
+        <h2>复杂度</h2>
+        <div class="complexity-grid">
+          <div><span>时间复杂度</span><strong>O(n²)</strong></div>
+          <div><span>空间复杂度</span><strong>O(1)</strong></div>
+        </div>
+      </section>
+
+      <div class="pager"><a class="pager-link prev" href="spiral-matrix.html"><span>上一题</span><strong>螺旋矩阵</strong></a><a class="pager-link next" href="set-matrix-zeroes.html"><span>下一题</span><strong>矩阵置零</strong></a></div>
+    </article>
+
+    <aside class="rail">
+      <div class="rail-card">
+        <h3>本页目录</h3>
+        <div class="toc"><a href="#statement">题目</a><a href="#idea">思路</a><a href="#code">模板解法</a><a href="#pitfalls">易错点</a><a href="#complexity">复杂度</a></div>
+      </div>
+      <div class="rail-card">
+        <h3>本题模板</h3>
+        <a class="tpl-block" href="../templates/matrix-simulation.html"><span class="tpl-block-role">主模板</span><strong>矩阵模拟</strong><span class="arrow">→</span></a>
+      </div>
+      <div class="rail-card">
+        <h3>同模板题目</h3>
+        <a class="rail-link" href="valid-sudoku.html"><span>34 有效的数独</span><i>→</i></a><a class="rail-link" href="spiral-matrix.html"><span>35 螺旋矩阵</span><i>→</i></a><a class="rail-link" href="set-matrix-zeroes.html"><span>37 矩阵置零</span><i>→</i></a><a class="rail-link" href="game-of-life.html"><span>38 生命游戏</span><i>→</i></a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-brand">模板 · LEETCODE</p>
+    <p>基于《面试经典 150 题》整理 · 代码以 Python 3 书写 · 静态站点，可离线阅读</p>
+  </div>
+</footer>
+<script src="../assets/app.js"></script>
+</body>
+</html>

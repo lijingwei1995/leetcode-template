@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>实现 Trie (前缀树) · LeetCode 模板手册</title>
+<meta name="description" content="请实现 Trie（前缀树）类，包含三个方法：Trie() 初始化前缀树对象；insert(word) 向树中插入字符串 word；search(word) 判断 word 是否在树中（必须是完整插入过的单词）；startsWith(prefix) 判断之前插入的字符串中是否存在以 prefix 为前缀的字符串。所有输入仅由小写英文字母组成。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b1f1d'/%3E%3Cpath d='M9 9h14M16 9v14' stroke='%23f0ead9' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="LeetCode 模板手册">
+      <span class="brand-mark"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-text">模板<span class="dot">·</span>LEETCODE</span>
+    </a>
+    <nav class="nav"><a class="nav-link active" href="../index.html">题库导航</a><a class="nav-link" href="../templates.html">模板手册</a>
+      <a class="nav-link nav-ext" href="../../%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8%20150%20%E9%A2%98%20-%20%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92%20-%20%E5%8A%9B%E6%89%A3%EF%BC%88LeetCode%EF%BC%89%E5%85%A8%E7%90%83%E6%9E%81%E5%AE%A2%E6%8C%9A%E7%88%B1%E7%9A%84%E6%8A%80%E6%9C%AF%E6%88%90%E9%95%BF%E5%B9%B3%E5%8F%B0.html" target="_blank" rel="noopener">原题计划 <span class="up">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container crumbs"><a href="../index.html">题库导航</a><span>/</span>字典树<span>/</span><span>实现 Trie (前缀树)</span></div>
+
+  <header class="container page-head">
+    <p class="page-kicker">No.98 · 字典树</p>
+    <h1>实现 Trie (前缀树)</h1>
+    <div class="meta-row">
+      <span class="pill pill-medium">中等</span>
+      <a class="meta-link" href="https://leetcode.cn/problems/implement-trie-prefix-tree/" target="_blank" rel="noopener">LeetCode 原题 <span class="up">↗</span></a>
+    </div>
+    <div class="tpl-row"><a class="tpl-block" href="../templates/trie.html"><span class="tpl-block-role">主模板</span><strong>字典树</strong><span class="arrow">→</span></a><a class="tpl-block" href="../templates/design-structure.html"><span class="tpl-block-role">相关模板</span><strong>数据结构设计</strong><span class="arrow">→</span></a></div>
+  </header>
+
+  <div class="container problem-layout">
+    <article class="prose">
+      <section id="statement">
+        <h2>题目</h2>
+        <p class="statement-p">请实现 Trie（前缀树）类，包含三个方法：Trie() 初始化前缀树对象；insert(word) 向树中插入字符串 word；search(word) 判断 word 是否在树中（必须是完整插入过的单词）；startsWith(prefix) 判断之前插入的字符串中是否存在以 prefix 为前缀的字符串。所有输入仅由小写英文字母组成。</p>
+        <div class="examples"><div class="example"><div class="ex-head">示例 1</div><div class="ex-row"><span>输入</span><code>操作 ["Trie","insert","search","search","startsWith","insert","search"]，参数 [[],["apple"],["apple"],["app"],["app"],["app"],["app"]]</code></div><div class="ex-row"><span>输出</span><code>[null,null,true,false,true,null,true]</code></div></div><div class="example"><div class="ex-head">示例 2</div><div class="ex-row"><span>输入</span><code>操作 ["Trie","insert","search","startsWith"]，参数 [[],["app"],["ap"],["ap"]]</code></div><div class="ex-row"><span>输出</span><code>[null,null,false,true]</code></div></div></div>
+      </section>
+
+      <section id="idea">
+        <h2>思路</h2>
+        <p class="lead-p">“公共前缀共享一条路径”是字典树的信号，套字典树模板：节点持有 children 映射与 end 标记，insert 沿字符逐层建节点、末尾打标记。变化点在于查询语义分两档——search 走完路径还要求 end 为真，startsWith 只要路径走得通即可；两者复用同一个按字符下行的查找。</p>
+        <div class="path-line">
+          <span class="path-step">识别信号</span><i>→</i>
+          <span class="path-step">套用模板</span><i>→</i>
+          <span class="path-step">调整变化点</span>
+        </div>
+      </section>
+
+      <section id="code">
+        <h2>模板解法</h2>
+        <div class="code-card">
+          <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-lang">Python 3</span><button class="copy-btn" data-copy type="button">复制代码</button></div>
+          <pre class="code-body"><span class="cl"><span class="ln">1</span><span class="lt"><span class="tok-kw">class</span> Trie:</span></span><span class="cl"><span class="ln">2</span><span class="lt">    <span class="tok-kw">def</span> <span class="tok-fn">__init__</span>(self):</span></span><span class="cl"><span class="ln">3</span><span class="lt">        self.children = {}</span></span><span class="cl hl"><span class="ln">4</span><span class="lt">        self.end = <span class="tok-kw">False</span>                           <span class="tok-cmt"># 变化点: end 标记区分“前缀存在”与“单词完整”</span></span></span><span class="cl"><span class="ln">5</span><span class="lt">&nbsp;</span></span><span class="cl"><span class="ln">6</span><span class="lt">    <span class="tok-kw">def</span> <span class="tok-fn">insert</span>(self, word):</span></span><span class="cl"><span class="ln">7</span><span class="lt">        node = self</span></span><span class="cl"><span class="ln">8</span><span class="lt">        <span class="tok-kw">for</span> ch <span class="tok-kw">in</span> word:</span></span><span class="cl"><span class="ln">9</span><span class="lt">            <span class="tok-kw">if</span> ch <span class="tok-kw">not</span> <span class="tok-kw">in</span> node.children:</span></span><span class="cl hl"><span class="ln">10</span><span class="lt">                node.children[ch] = <span class="tok-fn">Trie</span>()         <span class="tok-cmt"># 变化点: 沿字符逐层建节点</span></span></span><span class="cl"><span class="ln">11</span><span class="lt">            node = node.children[ch]</span></span><span class="cl"><span class="ln">12</span><span class="lt">        node.end = <span class="tok-kw">True</span></span></span><span class="cl"><span class="ln">13</span><span class="lt">&nbsp;</span></span><span class="cl"><span class="ln">14</span><span class="lt">    <span class="tok-kw">def</span> <span class="tok-fn">search</span>(self, word):</span></span><span class="cl"><span class="ln">15</span><span class="lt">        node = self.<span class="tok-fn">_walk</span>(word)</span></span><span class="cl hl"><span class="ln">16</span><span class="lt">        <span class="tok-kw">return</span> node <span class="tok-kw">is</span> <span class="tok-kw">not</span> <span class="tok-kw">None</span> <span class="tok-kw">and</span> node.end       <span class="tok-cmt"># 变化点: 完整单词要求 end 为真</span></span></span><span class="cl"><span class="ln">17</span><span class="lt">&nbsp;</span></span><span class="cl"><span class="ln">18</span><span class="lt">    <span class="tok-kw">def</span> <span class="tok-fn">startsWith</span>(self, prefix):</span></span><span class="cl"><span class="ln">19</span><span class="lt">        <span class="tok-kw">return</span> self.<span class="tok-fn">_walk</span>(prefix) <span class="tok-kw">is</span> <span class="tok-kw">not</span> <span class="tok-kw">None</span></span></span><span class="cl"><span class="ln">20</span><span class="lt">&nbsp;</span></span><span class="cl"><span class="ln">21</span><span class="lt">    <span class="tok-kw">def</span> <span class="tok-fn">_walk</span>(self, s):</span></span><span class="cl"><span class="ln">22</span><span class="lt">        node = self</span></span><span class="cl"><span class="ln">23</span><span class="lt">        <span class="tok-kw">for</span> ch <span class="tok-kw">in</span> s:</span></span><span class="cl"><span class="ln">24</span><span class="lt">            <span class="tok-kw">if</span> ch <span class="tok-kw">not</span> <span class="tok-kw">in</span> node.children:</span></span><span class="cl"><span class="ln">25</span><span class="lt">                <span class="tok-kw">return</span> <span class="tok-kw">None</span></span></span><span class="cl"><span class="ln">26</span><span class="lt">            node = node.children[ch]</span></span><span class="cl"><span class="ln">27</span><span class="lt">        <span class="tok-kw">return</span> node</span></span></pre>
+        </div>
+        <h3 class="sub-h">变化点代码</h3>
+        <ul class="var-list"><li><span class="v-line">L4</span><p>end 标记区分“前缀存在”与“单词完整”</p></li><li><span class="v-line">L10</span><p>沿字符逐层建节点</p></li><li><span class="v-line">L16</span><p>完整单词要求 end 为真</p></li></ul>
+      </section>
+
+      <section id="pitfalls">
+        <h2>易错点</h2>
+        <ul class="pitfall-list"><li><span>01</span><p>search 与 startsWith 的唯一区别是 end 标记，存在前缀但没打标记时 search 必须返回 False</p></li><li><span>02</span><p>insert 只在子节点缺失时新建，已有路径直接走下去，覆盖节点会丢掉其它单词</p></li><li><span>03</span><p>三个方法都从根（self）出发按字符下行，查不到边就返回 None/False</p></li></ul>
+      </section>
+
+      <section id="complexity">
+        <h2>复杂度</h2>
+        <div class="complexity-grid">
+          <div><span>时间复杂度</span><strong>insert / search / startsWith 每次 O(L)，L 为字符串长度</strong></div>
+          <div><span>空间复杂度</span><strong>O(总插入字符数)</strong></div>
+        </div>
+      </section>
+
+      <div class="pager"><a class="pager-link prev" href="word-ladder.html"><span>上一题</span><strong>单词接龙</strong></a><a class="pager-link next" href="design-add-and-search-words-data-structure.html"><span>下一题</span><strong>添加与搜索单词 - 数据结构设计</strong></a></div>
+    </article>
+
+    <aside class="rail">
+      <div class="rail-card">
+        <h3>本页目录</h3>
+        <div class="toc"><a href="#statement">题目</a><a href="#idea">思路</a><a href="#code">模板解法</a><a href="#pitfalls">易错点</a><a href="#complexity">复杂度</a></div>
+      </div>
+      <div class="rail-card">
+        <h3>本题模板</h3>
+        <a class="tpl-block" href="../templates/trie.html"><span class="tpl-block-role">主模板</span><strong>字典树</strong><span class="arrow">→</span></a><a class="tpl-block" href="../templates/design-structure.html"><span class="tpl-block-role">相关模板</span><strong>数据结构设计</strong><span class="arrow">→</span></a>
+      </div>
+      <div class="rail-card">
+        <h3>同模板题目</h3>
+        <a class="rail-link" href="design-add-and-search-words-data-structure.html"><span>99 添加与搜索单词 - 数据结构设计</span><i>→</i></a><a class="rail-link" href="word-search-ii.html"><span>100 单词搜索 II</span><i>→</i></a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-brand">模板 · LEETCODE</p>
+    <p>基于《面试经典 150 题》整理 · 代码以 Python 3 书写 · 静态站点，可离线阅读</p>
+  </div>
+</footer>
+<script src="../assets/app.js"></script>
+</body>
+</html>

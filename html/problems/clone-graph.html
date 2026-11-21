@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>克隆图 · LeetCode 模板手册</title>
+<meta name="description" content="给你无向连通图中一个节点的引用 node，请返回该图的深拷贝（克隆）。图中每个节点都包含它的值 val 和邻居列表 neighbors，邻居是与它直接相连的其它节点。返回的克隆图必须与原图结构和值完全一致，并且不能对原图做任何修改。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b1f1d'/%3E%3Cpath d='M9 9h14M16 9v14' stroke='%23f0ead9' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="LeetCode 模板手册">
+      <span class="brand-mark"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-text">模板<span class="dot">·</span>LEETCODE</span>
+    </a>
+    <nav class="nav"><a class="nav-link active" href="../index.html">题库导航</a><a class="nav-link" href="../templates.html">模板手册</a>
+      <a class="nav-link nav-ext" href="../../%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8%20150%20%E9%A2%98%20-%20%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92%20-%20%E5%8A%9B%E6%89%A3%EF%BC%88LeetCode%EF%BC%89%E5%85%A8%E7%90%83%E6%9E%81%E5%AE%A2%E6%8C%9A%E7%88%B1%E7%9A%84%E6%8A%80%E6%9C%AF%E6%88%90%E9%95%BF%E5%B9%B3%E5%8F%B0.html" target="_blank" rel="noopener">原题计划 <span class="up">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container crumbs"><a href="../index.html">题库导航</a><span>/</span>图<span>/</span><span>克隆图</span></div>
+
+  <header class="container page-head">
+    <p class="page-kicker">No.91 · 图</p>
+    <h1>克隆图</h1>
+    <div class="meta-row">
+      <span class="pill pill-medium">中等</span>
+      <a class="meta-link" href="https://leetcode.cn/problems/clone-graph/" target="_blank" rel="noopener">LeetCode 原题 <span class="up">↗</span></a>
+    </div>
+    <div class="tpl-row"><a class="tpl-block" href="../templates/graph-bfs.html"><span class="tpl-block-role">主模板</span><strong>图 BFS / 最短步数</strong><span class="arrow">→</span></a><a class="tpl-block" href="../templates/hash-map.html"><span class="tpl-block-role">相关模板</span><strong>哈希映射</strong><span class="arrow">→</span></a></div>
+  </header>
+
+  <div class="container problem-layout">
+    <article class="prose">
+      <section id="statement">
+        <h2>题目</h2>
+        <p class="statement-p">给你无向连通图中一个节点的引用 node，请返回该图的深拷贝（克隆）。图中每个节点都包含它的值 val 和邻居列表 neighbors，邻居是与它直接相连的其它节点。返回的克隆图必须与原图结构和值完全一致，并且不能对原图做任何修改。</p>
+        <div class="examples"><div class="example"><div class="ex-head">示例 1</div><div class="ex-row"><span>输入</span><code>adjList = [[2,4],[1,3],[2,4],[1,3]]</code></div><div class="ex-row"><span>输出</span><code>[[2,4],[1,3],[2,4],[1,3]]（结构与原图相同的克隆图）</code></div></div><div class="example"><div class="ex-head">示例 2</div><div class="ex-row"><span>输入</span><code>adjList = [[]]</code></div><div class="ex-row"><span>输出</span><code>[[]]</code></div></div></div>
+      </section>
+
+      <section id="idea">
+        <h2>思路</h2>
+        <p class="lead-p">克隆的难点在环状引用会无限复制，信号是“遍历 + 旧新映射”，套图 BFS 模板并用哈希表 old_new 兼做 visited：首次遇到邻居时先复制节点再入队，出队时把新邻居挂到新节点的 neighbors 上。变化点在于建映射与连边同步进行，哈希表一举两得——既防重复克隆又提供新旧对照。</p>
+        <div class="path-line">
+          <span class="path-step">识别信号</span><i>→</i>
+          <span class="path-step">套用模板</span><i>→</i>
+          <span class="path-step">调整变化点</span>
+        </div>
+      </section>
+
+      <section id="code">
+        <h2>模板解法</h2>
+        <div class="code-card">
+          <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-lang">Python 3</span><button class="copy-btn" data-copy type="button">复制代码</button></div>
+          <pre class="code-body"><span class="cl"><span class="ln">1</span><span class="lt"><span class="tok-kw">from</span> collections <span class="tok-kw">import</span> <span class="tok-bi">deque</span></span></span><span class="cl"><span class="ln">2</span><span class="lt">&nbsp;</span></span><span class="cl"><span class="ln">3</span><span class="lt"><span class="tok-kw">class</span> Solution:</span></span><span class="cl"><span class="ln">4</span><span class="lt">    <span class="tok-kw">def</span> <span class="tok-fn">cloneGraph</span>(self, node):</span></span><span class="cl"><span class="ln">5</span><span class="lt">        <span class="tok-kw">if</span> <span class="tok-kw">not</span> node:</span></span><span class="cl"><span class="ln">6</span><span class="lt">            <span class="tok-kw">return</span> <span class="tok-kw">None</span></span></span><span class="cl hl"><span class="ln">7</span><span class="lt">        old_new = {node: <span class="tok-fn">Node</span>(node.val)}           <span class="tok-cmt"># 变化点: 哈希表存旧节点→新节点，兼做 visited</span></span></span><span class="cl"><span class="ln">8</span><span class="lt">        q = <span class="tok-bi">deque</span>([node])</span></span><span class="cl"><span class="ln">9</span><span class="lt">        <span class="tok-kw">while</span> q:</span></span><span class="cl"><span class="ln">10</span><span class="lt">            cur = q.<span class="tok-fn">popleft</span>()</span></span><span class="cl"><span class="ln">11</span><span class="lt">            <span class="tok-kw">for</span> nb <span class="tok-kw">in</span> cur.neighbors:</span></span><span class="cl hl"><span class="ln">12</span><span class="lt">                <span class="tok-kw">if</span> nb <span class="tok-kw">not</span> <span class="tok-kw">in</span> old_new:              <span class="tok-cmt"># 变化点: 首次见到邻居先复制再入队</span></span></span><span class="cl"><span class="ln">13</span><span class="lt">                    old_new[nb] = <span class="tok-fn">Node</span>(nb.val)</span></span><span class="cl"><span class="ln">14</span><span class="lt">                    q.<span class="tok-fn">append</span>(nb)</span></span><span class="cl hl"><span class="ln">15</span><span class="lt">                old_new[cur].neighbors.<span class="tok-fn">append</span>(old_new[nb])   <span class="tok-cmt"># 变化点: 在新节点之间连边</span></span></span><span class="cl"><span class="ln">16</span><span class="lt">        <span class="tok-kw">return</span> old_new[node]</span></span></pre>
+        </div>
+        <h3 class="sub-h">变化点代码</h3>
+        <ul class="var-list"><li><span class="v-line">L7</span><p>哈希表存旧节点→新节点，兼做 visited</p></li><li><span class="v-line">L12</span><p>首次见到邻居先复制再入队</p></li><li><span class="v-line">L15</span><p>在新节点之间连边</p></li></ul>
+      </section>
+
+      <section id="pitfalls">
+        <h2>易错点</h2>
+        <ul class="pitfall-list"><li><span>01</span><p>复制节点要在入队前登记进 old_new，等出队再登记会让同一节点被克隆多次</p></li><li><span>02</span><p>连边必须连新节点：old_new[cur].neighbors.append(old_new[nb])，混入旧节点会破坏克隆</p></li><li><span>03</span><p>输入节点为 None 时直接返回 None，空图也要处理</p></li></ul>
+      </section>
+
+      <section id="complexity">
+        <h2>复杂度</h2>
+        <div class="complexity-grid">
+          <div><span>时间复杂度</span><strong>O(V+E)</strong></div>
+          <div><span>空间复杂度</span><strong>O(V)</strong></div>
+        </div>
+      </section>
+
+      <div class="pager"><a class="pager-link prev" href="surrounded-regions.html"><span>上一题</span><strong>被围绕的区域</strong></a><a class="pager-link next" href="evaluate-division.html"><span>下一题</span><strong>除法求值</strong></a></div>
+    </article>
+
+    <aside class="rail">
+      <div class="rail-card">
+        <h3>本页目录</h3>
+        <div class="toc"><a href="#statement">题目</a><a href="#idea">思路</a><a href="#code">模板解法</a><a href="#pitfalls">易错点</a><a href="#complexity">复杂度</a></div>
+      </div>
+      <div class="rail-card">
+        <h3>本题模板</h3>
+        <a class="tpl-block" href="../templates/graph-bfs.html"><span class="tpl-block-role">主模板</span><strong>图 BFS / 最短步数</strong><span class="arrow">→</span></a><a class="tpl-block" href="../templates/hash-map.html"><span class="tpl-block-role">相关模板</span><strong>哈希映射</strong><span class="arrow">→</span></a>
+      </div>
+      <div class="rail-card">
+        <h3>同模板题目</h3>
+        <a class="rail-link" href="number-of-islands.html"><span>89 岛屿数量</span><i>→</i></a><a class="rail-link" href="evaluate-division.html"><span>92 除法求值</span><i>→</i></a><a class="rail-link" href="snakes-and-ladders.html"><span>95 蛇梯棋</span><i>→</i></a><a class="rail-link" href="minimum-genetic-mutation.html"><span>96 最小基因变化</span><i>→</i></a><a class="rail-link" href="word-ladder.html"><span>97 单词接龙</span><i>→</i></a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-brand">模板 · LEETCODE</p>
+    <p>基于《面试经典 150 题》整理 · 代码以 Python 3 书写 · 静态站点，可离线阅读</p>
+  </div>
+</footer>
+<script src="../assets/app.js"></script>
+</body>
+</html>

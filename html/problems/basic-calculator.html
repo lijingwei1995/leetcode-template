@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>基本计算器 · LeetCode 模板手册</title>
+<meta name="description" content="给你一个字符串表达式 s，请你实现一个基本计算器来计算并返回它的值。表达式由整数（非负）、'+'、'-'、'('、')' 和空格组成，s 表示一个有效的表达式；'-' 也可以用作一元运算符（如 "-1" 和 "-(2 + 3)"）；不能将两个相邻的整数用空格分隔（如 "13 + 2" 合法，"1 3" 非法）。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b1f1d'/%3E%3Cpath d='M9 9h14M16 9v14' stroke='%23f0ead9' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="LeetCode 模板手册">
+      <span class="brand-mark"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-text">模板<span class="dot">·</span>LEETCODE</span>
+    </a>
+    <nav class="nav"><a class="nav-link active" href="../index.html">题库导航</a><a class="nav-link" href="../templates.html">模板手册</a>
+      <a class="nav-link nav-ext" href="../../%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8%20150%20%E9%A2%98%20-%20%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92%20-%20%E5%8A%9B%E6%89%A3%EF%BC%88LeetCode%EF%BC%89%E5%85%A8%E7%90%83%E6%9E%81%E5%AE%A2%E6%8C%9A%E7%88%B1%E7%9A%84%E6%8A%80%E6%9C%AF%E6%88%90%E9%95%BF%E5%B9%B3%E5%8F%B0.html" target="_blank" rel="noopener">原题计划 <span class="up">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container crumbs"><a href="../index.html">题库导航</a><span>/</span>栈<span>/</span><span>基本计算器</span></div>
+
+  <header class="container page-head">
+    <p class="page-kicker">No.56 · 栈</p>
+    <h1>基本计算器</h1>
+    <div class="meta-row">
+      <span class="pill pill-hard">困难</span>
+      <a class="meta-link" href="https://leetcode.cn/problems/basic-calculator/" target="_blank" rel="noopener">LeetCode 原题 <span class="up">↗</span></a>
+    </div>
+    <div class="tpl-row"><a class="tpl-block" href="../templates/stack-expression.html"><span class="tpl-block-role">主模板</span><strong>栈与表达式</strong><span class="arrow">→</span></a></div>
+  </header>
+
+  <div class="container problem-layout">
+    <article class="prose">
+      <section id="statement">
+        <h2>题目</h2>
+        <p class="statement-p">给你一个字符串表达式 s，请你实现一个基本计算器来计算并返回它的值。表达式由整数（非负）、'+'、'-'、'('、')' 和空格组成，s 表示一个有效的表达式；'-' 也可以用作一元运算符（如 "-1" 和 "-(2 + 3)"）；不能将两个相邻的整数用空格分隔（如 "13 + 2" 合法，"1 3" 非法）。</p>
+        <div class="examples"><div class="example"><div class="ex-head">示例 1</div><div class="ex-row"><span>输入</span><code>s = "(1+(4+5+2)-3)+(6+8)"</code></div><div class="ex-row"><span>输出</span><code>23</code></div></div><div class="example"><div class="ex-head">示例 2</div><div class="ex-row"><span>输入</span><code>s = " 2-1 + 2 "</code></div><div class="ex-row"><span>输出</span><code>3</code></div></div></div>
+      </section>
+
+      <section id="idea">
+        <h2>思路</h2>
+        <p class="lead-p">含括号的加减表达式是栈与表达式的信号：逐字符扫描，遇 '(' 把括号外的累计结果 total 与当前符号 sign 压栈隔离，遇 ')' 结算括号内后乘回符号、加回结果。变化点在运算符与括号出现时都要先把滞留的 num 结算进 total，一元负号靠 sign=-1 配 num=0 自然处理。</p>
+        <div class="path-line">
+          <span class="path-step">识别信号</span><i>→</i>
+          <span class="path-step">套用模板</span><i>→</i>
+          <span class="path-step">调整变化点</span>
+        </div>
+      </section>
+
+      <section id="code">
+        <h2>模板解法</h2>
+        <div class="code-card">
+          <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-lang">Python 3</span><button class="copy-btn" data-copy type="button">复制代码</button></div>
+          <pre class="code-body"><span class="cl"><span class="ln">1</span><span class="lt"><span class="tok-kw">class</span> Solution:</span></span><span class="cl"><span class="ln">2</span><span class="lt">    <span class="tok-kw">def</span> <span class="tok-fn">calculate</span>(self, s):</span></span><span class="cl"><span class="ln">3</span><span class="lt">        total = <span class="tok-num">0</span></span></span><span class="cl"><span class="ln">4</span><span class="lt">        sign = <span class="tok-num">1</span></span></span><span class="cl"><span class="ln">5</span><span class="lt">        num = <span class="tok-num">0</span></span></span><span class="cl"><span class="ln">6</span><span class="lt">        stack = []</span></span><span class="cl"><span class="ln">7</span><span class="lt">        <span class="tok-kw">for</span> ch <span class="tok-kw">in</span> s:</span></span><span class="cl"><span class="ln">8</span><span class="lt">            <span class="tok-kw">if</span> ch.<span class="tok-fn">isdigit</span>():</span></span><span class="cl"><span class="ln">9</span><span class="lt">                num = num * <span class="tok-num">10</span> + <span class="tok-bi">int</span>(ch)</span></span><span class="cl"><span class="ln">10</span><span class="lt">            <span class="tok-kw">elif</span> ch == <span class="tok-str">'+'</span>:</span></span><span class="cl"><span class="ln">11</span><span class="lt">                total += sign * num</span></span><span class="cl"><span class="ln">12</span><span class="lt">                num, sign = <span class="tok-num">0</span>, <span class="tok-num">1</span></span></span><span class="cl"><span class="ln">13</span><span class="lt">            <span class="tok-kw">elif</span> ch == <span class="tok-str">'-'</span>:</span></span><span class="cl hl"><span class="ln">14</span><span class="lt">                total += sign * num             <span class="tok-cmt"># 变化点: 一元负号时 num=0，自然生效</span></span></span><span class="cl"><span class="ln">15</span><span class="lt">                num, sign = <span class="tok-num">0</span>, -<span class="tok-num">1</span></span></span><span class="cl"><span class="ln">16</span><span class="lt">            <span class="tok-kw">elif</span> ch == <span class="tok-str">'('</span>:</span></span><span class="cl hl"><span class="ln">17</span><span class="lt">                stack.<span class="tok-fn">append</span>(total)             <span class="tok-cmt"># 变化点: 括号外的结果与符号压栈隔离</span></span></span><span class="cl"><span class="ln">18</span><span class="lt">                stack.<span class="tok-fn">append</span>(sign)</span></span><span class="cl"><span class="ln">19</span><span class="lt">                total, sign = <span class="tok-num">0</span>, <span class="tok-num">1</span></span></span><span class="cl"><span class="ln">20</span><span class="lt">            <span class="tok-kw">elif</span> ch == <span class="tok-str">')'</span>:</span></span><span class="cl"><span class="ln">21</span><span class="lt">                total += sign * num</span></span><span class="cl"><span class="ln">22</span><span class="lt">                num = <span class="tok-num">0</span></span></span><span class="cl hl"><span class="ln">23</span><span class="lt">                total *= stack.<span class="tok-fn">pop</span>()            <span class="tok-cmt"># 变化点: 乘回括号前符号、加回括号前结果</span></span></span><span class="cl"><span class="ln">24</span><span class="lt">                total += stack.<span class="tok-fn">pop</span>()</span></span><span class="cl"><span class="ln">25</span><span class="lt">        <span class="tok-kw">return</span> total + sign * num</span></span></pre>
+        </div>
+        <h3 class="sub-h">变化点代码</h3>
+        <ul class="var-list"><li><span class="v-line">L14</span><p>一元负号时 num=0，自然生效</p></li><li><span class="v-line">L17</span><p>括号外的结果与符号压栈隔离</p></li><li><span class="v-line">L23</span><p>乘回括号前符号、加回括号前结果</p></li></ul>
+      </section>
+
+      <section id="pitfalls">
+        <h2>易错点</h2>
+        <ul class="pitfall-list"><li><span>01</span><p>遇到运算符、括号和 ')' 时都要先把滞留的 num 结算进 total，否则多位数会漏加</p></li><li><span>02</span><p>压栈顺序：先压 total 再压 sign，弹出时先弹 sign 乘、再弹 total 加，顺序不能反</p></li><li><span>03</span><p>扫描结束还有最后一个数字没结算，返回前要补 total + sign * num</p></li></ul>
+      </section>
+
+      <section id="complexity">
+        <h2>复杂度</h2>
+        <div class="complexity-grid">
+          <div><span>时间复杂度</span><strong>O(n)</strong></div>
+          <div><span>空间复杂度</span><strong>O(n)</strong></div>
+        </div>
+      </section>
+
+      <div class="pager"><a class="pager-link prev" href="evaluate-reverse-polish-notation.html"><span>上一题</span><strong>逆波兰表达式求值</strong></a><a class="pager-link next" href="linked-list-cycle.html"><span>下一题</span><strong>环形链表</strong></a></div>
+    </article>
+
+    <aside class="rail">
+      <div class="rail-card">
+        <h3>本页目录</h3>
+        <div class="toc"><a href="#statement">题目</a><a href="#idea">思路</a><a href="#code">模板解法</a><a href="#pitfalls">易错点</a><a href="#complexity">复杂度</a></div>
+      </div>
+      <div class="rail-card">
+        <h3>本题模板</h3>
+        <a class="tpl-block" href="../templates/stack-expression.html"><span class="tpl-block-role">主模板</span><strong>栈与表达式</strong><span class="arrow">→</span></a>
+      </div>
+      <div class="rail-card">
+        <h3>同模板题目</h3>
+        <a class="rail-link" href="valid-parentheses.html"><span>52 有效的括号</span><i>→</i></a><a class="rail-link" href="simplify-path.html"><span>53 简化路径</span><i>→</i></a><a class="rail-link" href="evaluate-reverse-polish-notation.html"><span>55 逆波兰表达式求值</span><i>→</i></a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-brand">模板 · LEETCODE</p>
+    <p>基于《面试经典 150 题》整理 · 代码以 Python 3 书写 · 静态站点，可离线阅读</p>
+  </div>
+</footer>
+<script src="../assets/app.js"></script>
+</body>
+</html>

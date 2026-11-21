@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>删除链表的倒数第 N 个结点 · LeetCode 模板手册</title>
+<meta name="description" content="给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。进阶：尝试使用一趟扫描实现。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b1f1d'/%3E%3Cpath d='M9 9h14M16 9v14' stroke='%23f0ead9' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="LeetCode 模板手册">
+      <span class="brand-mark"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-text">模板<span class="dot">·</span>LEETCODE</span>
+    </a>
+    <nav class="nav"><a class="nav-link active" href="../index.html">题库导航</a><a class="nav-link" href="../templates.html">模板手册</a>
+      <a class="nav-link nav-ext" href="../../%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8%20150%20%E9%A2%98%20-%20%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92%20-%20%E5%8A%9B%E6%89%A3%EF%BC%88LeetCode%EF%BC%89%E5%85%A8%E7%90%83%E6%9E%81%E5%AE%A2%E6%8C%9A%E7%88%B1%E7%9A%84%E6%8A%80%E6%9C%AF%E6%88%90%E9%95%BF%E5%B9%B3%E5%8F%B0.html" target="_blank" rel="noopener">原题计划 <span class="up">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container crumbs"><a href="../index.html">题库导航</a><span>/</span>链表<span>/</span><span>删除链表的倒数第 N 个结点</span></div>
+
+  <header class="container page-head">
+    <p class="page-kicker">No.63 · 链表</p>
+    <h1>删除链表的倒数第 N 个结点</h1>
+    <div class="meta-row">
+      <span class="pill pill-medium">中等</span>
+      <a class="meta-link" href="https://leetcode.cn/problems/remove-nth-node-from-end-of-list/" target="_blank" rel="noopener">LeetCode 原题 <span class="up">↗</span></a>
+    </div>
+    <div class="tpl-row"><a class="tpl-block" href="../templates/linked-list-dummy.html"><span class="tpl-block-role">主模板</span><strong>链表哨兵与遍历</strong><span class="arrow">→</span></a><a class="tpl-block" href="../templates/fast-slow.html"><span class="tpl-block-role">相关模板</span><strong>快慢指针</strong><span class="arrow">→</span></a></div>
+  </header>
+
+  <div class="container problem-layout">
+    <article class="prose">
+      <section id="statement">
+        <h2>题目</h2>
+        <p class="statement-p">给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。进阶：尝试使用一趟扫描实现。</p>
+        <div class="examples"><div class="example"><div class="ex-head">示例 1</div><div class="ex-row"><span>输入</span><code>head = [1,2,3,4,5], n = 2</code></div><div class="ex-row"><span>输出</span><code>[1,2,3,5]</code></div></div><div class="example"><div class="ex-head">示例 2</div><div class="ex-row"><span>输入</span><code>head = [1], n = 1</code></div><div class="ex-row"><span>输出</span><code>[]</code></div></div></div>
+      </section>
+
+      <section id="idea">
+        <h2>思路</h2>
+        <p class="lead-p">删除倒数第 n 个节点是链表哨兵 + 快慢指针的信号：fast 先走 n 步拉开固定差距，再与 slow 同速前进，fast 到尾时 slow 恰停在目标前驱。变化点在 fast 起步于 dummy 走 n 步、删除用一行 slow.next = slow.next.next 完成。</p>
+        <div class="path-line">
+          <span class="path-step">识别信号</span><i>→</i>
+          <span class="path-step">套用模板</span><i>→</i>
+          <span class="path-step">调整变化点</span>
+        </div>
+      </section>
+
+      <section id="code">
+        <h2>模板解法</h2>
+        <div class="code-card">
+          <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-lang">Python 3</span><button class="copy-btn" data-copy type="button">复制代码</button></div>
+          <pre class="code-body"><span class="cl"><span class="ln">1</span><span class="lt"><span class="tok-kw">class</span> Solution:</span></span><span class="cl"><span class="ln">2</span><span class="lt">    <span class="tok-kw">def</span> <span class="tok-fn">removeNthFromEnd</span>(self, head, n):</span></span><span class="cl"><span class="ln">3</span><span class="lt">        dummy = <span class="tok-fn">ListNode</span>(<span class="tok-num">0</span>, head)</span></span><span class="cl"><span class="ln">4</span><span class="lt">        fast = slow = dummy</span></span><span class="cl hl"><span class="ln">5</span><span class="lt">        <span class="tok-kw">for</span> _ <span class="tok-kw">in</span> <span class="tok-bi">range</span>(n):                      <span class="tok-cmt"># 变化点: fast 先走 n 步拉开距离</span></span></span><span class="cl"><span class="ln">6</span><span class="lt">            fast = fast.next</span></span><span class="cl"><span class="ln">7</span><span class="lt">        <span class="tok-kw">while</span> fast.next:</span></span><span class="cl"><span class="ln">8</span><span class="lt">            fast = fast.next</span></span><span class="cl"><span class="ln">9</span><span class="lt">            slow = slow.next</span></span><span class="cl hl"><span class="ln">10</span><span class="lt">        slow.next = slow.next.next              <span class="tok-cmt"># 变化点: slow 停在倒数第 n+1 个节点，跳过目标</span></span></span><span class="cl"><span class="ln">11</span><span class="lt">        <span class="tok-kw">return</span> dummy.next</span></span></pre>
+        </div>
+        <h3 class="sub-h">变化点代码</h3>
+        <ul class="var-list"><li><span class="v-line">L5</span><p>fast 先走 n 步拉开距离</p></li><li><span class="v-line">L10</span><p>slow 停在倒数第 n+1 个节点，跳过目标</p></li></ul>
+      </section>
+
+      <section id="pitfalls">
+        <h2>易错点</h2>
+        <ul class="pitfall-list"><li><span>01</span><p>两个指针都要从 dummy 出发，否则删除头节点时没有前驱</p></li><li><span>02</span><p>fast 先走 n 步后循环条件是 fast.next 非空，保证 slow 停在目标前驱而不是目标</p></li><li><span>03</span><p>一趟扫描的关键是固定的 n 步差距，别先数总长度再走第二遍</p></li></ul>
+      </section>
+
+      <section id="complexity">
+        <h2>复杂度</h2>
+        <div class="complexity-grid">
+          <div><span>时间复杂度</span><strong>O(n)</strong></div>
+          <div><span>空间复杂度</span><strong>O(1)</strong></div>
+        </div>
+      </section>
+
+      <div class="pager"><a class="pager-link prev" href="reverse-nodes-in-k-group.html"><span>上一题</span><strong>K 个一组翻转链表</strong></a><a class="pager-link next" href="remove-duplicates-from-sorted-list-ii.html"><span>下一题</span><strong>删除排序链表中的重复元素 II</strong></a></div>
+    </article>
+
+    <aside class="rail">
+      <div class="rail-card">
+        <h3>本页目录</h3>
+        <div class="toc"><a href="#statement">题目</a><a href="#idea">思路</a><a href="#code">模板解法</a><a href="#pitfalls">易错点</a><a href="#complexity">复杂度</a></div>
+      </div>
+      <div class="rail-card">
+        <h3>本题模板</h3>
+        <a class="tpl-block" href="../templates/linked-list-dummy.html"><span class="tpl-block-role">主模板</span><strong>链表哨兵与遍历</strong><span class="arrow">→</span></a><a class="tpl-block" href="../templates/fast-slow.html"><span class="tpl-block-role">相关模板</span><strong>快慢指针</strong><span class="arrow">→</span></a>
+      </div>
+      <div class="rail-card">
+        <h3>同模板题目</h3>
+        <a class="rail-link" href="add-two-numbers.html"><span>58 两数相加</span><i>→</i></a><a class="rail-link" href="merge-two-sorted-lists.html"><span>59 合并两个有序链表</span><i>→</i></a><a class="rail-link" href="copy-list-with-random-pointer.html"><span>60 随机链表的复制</span><i>→</i></a><a class="rail-link" href="reverse-linked-list-ii.html"><span>61 反转链表 II</span><i>→</i></a><a class="rail-link" href="reverse-nodes-in-k-group.html"><span>62 K 个一组翻转链表</span><i>→</i></a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-brand">模板 · LEETCODE</p>
+    <p>基于《面试经典 150 题》整理 · 代码以 Python 3 书写 · 静态站点，可离线阅读</p>
+  </div>
+</footer>
+<script src="../assets/app.js"></script>
+</body>
+</html>
