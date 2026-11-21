@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>背包 DP · 模板 · LeetCode 模板手册</title>
+<meta name="description" content="从物品集合中选，凑出目标。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b1f1d'/%3E%3Cpath d='M9 9h14M16 9v14' stroke='%23f0ead9' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="LeetCode 模板手册">
+      <span class="brand-mark"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-text">模板<span class="dot">·</span>LEETCODE</span>
+    </a>
+    <nav class="nav"><a class="nav-link" href="../index.html">题库导航</a><a class="nav-link active" href="../templates.html">模板手册</a>
+      <a class="nav-link nav-ext" href="../../%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8%20150%20%E9%A2%98%20-%20%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92%20-%20%E5%8A%9B%E6%89%A3%EF%BC%88LeetCode%EF%BC%89%E5%85%A8%E7%90%83%E6%9E%81%E5%AE%A2%E6%8C%9A%E7%88%B1%E7%9A%84%E6%8A%80%E6%9C%AF%E6%88%90%E9%95%BF%E5%B9%B3%E5%8F%B0.html" target="_blank" rel="noopener">原题计划 <span class="up">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container crumbs"><a href="../templates.html">模板手册</a><span>/</span>动态规划<span>/</span><span>背包 DP</span></div>
+  <header class="container page-head tpl-head">
+    <p class="page-kicker">动态规划 · TEMPLATE</p>
+    <h1>背包 DP</h1>
+    <p class="lede">从物品集合中选，凑出目标。</p>
+    <div class="meta-row">
+      <span class="pill pill-plain">2 道题</span>
+      <span class="pill pill-plain">O(物品数 × 目标容量)</span>
+    </div>
+  </header>
+
+  <div class="container tpl-layout">
+    <article class="prose">
+      <section>
+        <h2>核心思路</h2>
+        <p class="lead-p">把问题转成背包：dp[j] 表示凑出容量/金额 j 的最优值或可达性。0-1 背包容量倒序，完全背包正序；求最少个数初始化为 inf，求方案数初始化为 1。</p>
+        <div class="callout"><span class="callout-mark">!</span><p>本模板在题库中关联 2 道题，其中 2 道以它为主模板。先判断题型，再动手写代码。</p></div>
+      </section>
+
+      <section>
+        <h2>识别信号</h2>
+        <p>看到下面这些特征，优先想到这个模板；如果同时符合多个模板，再看哪一条约束最紧。</p>
+        <ol class="signal-list"><li><span>01</span>零钱兑换、单词拆分</li><li><span>02</span>组合数 / 方案数</li><li><span>03</span>每个物品可选一次或无限次</li></ol>
+      </section>
+
+      <section>
+        <h2>模板骨架</h2>
+        <div class="code-card">
+          <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-lang">Python 3</span><button class="copy-btn" data-copy type="button">复制代码</button></div>
+          <pre class="code-body"><span class="cl"><span class="ln">1</span><span class="lt">dp = [<span class="tok-bi">inf</span>] * (amount + <span class="tok-num">1</span>)     <span class="tok-cmt"># 或 [False] * (n + 1)</span></span></span><span class="cl"><span class="ln">2</span><span class="lt">dp[<span class="tok-num">0</span>] = <span class="tok-num">0</span></span></span><span class="cl"><span class="ln">3</span><span class="lt"><span class="tok-kw">for</span> coin <span class="tok-kw">in</span> coins:            <span class="tok-cmt"># 完全背包：物品在外</span></span></span><span class="cl"><span class="ln">4</span><span class="lt">    <span class="tok-kw">for</span> j <span class="tok-kw">in</span> <span class="tok-bi">range</span>(coin, amount + <span class="tok-num">1</span>):</span></span><span class="cl hl"><span class="ln">5</span><span class="lt">        dp[j] = <span class="tok-bi">min</span>(dp[j], dp[j - coin] + <span class="tok-num">1</span>)   <span class="tok-cmt"># 变化点：转移</span></span></span><span class="cl"><span class="ln">6</span><span class="lt"><span class="tok-kw">return</span> dp[amount]</span></span></pre>
+        </div>
+        <p class="code-note">高亮行是应用时需要替换或调整的地方，下面逐条说明。</p>
+      </section>
+
+      <section>
+        <h2>变化点</h2>
+        <ul class="var-list"><li><span class="v-dot"></span><p>零钱兑换：完全背包求最少硬币数</p></li><li><span class="v-dot"></span><p>单词拆分：布尔可达性，按单词长度切分</p></li><li><span class="v-dot"></span><p>组合数：累加方案数，注意遍历顺序避免重复计数</p></li><li><span class="v-dot"></span><p>0-1 背包：容量必须倒序遍历</p></li></ul>
+      </section>
+
+      <section>
+        <h2>适用题目</h2>
+        <div class="role-block"><span class="role-label">主模板 · 2 题</span><div class="mini-list"><a class="mini-row" href="../problems/word-break.html"><span class="mini-no">139</span><span class="mini-title">单词拆分</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/coin-change.html"><span class="mini-no">140</span><span class="mini-title">零钱兑换</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a></div></div>
+        
+      </section>
+
+      <section>
+        <h2>参考</h2>
+        <p class="ref-line">labuladong · 背包问题</p>
+      </section>
+    </article>
+
+    <aside class="rail">
+      <div class="rail-card">
+        <h3>模板信息</h3>
+        <dl class="rail-dl">
+          <div><dt>分组</dt><dd>动态规划</dd></div>
+          <div><dt>复杂度</dt><dd>O(物品数 × 目标容量)</dd></div>
+          <div><dt>主模板</dt><dd>2 题</dd></div>
+          <div><dt>相关引用</dt><dd>0 题</dd></div>
+        </dl>
+      </div>
+      <div class="rail-card">
+        <h3>同组模板</h3>
+        <a class="rail-link" href="dp-linear.html"><span>线性 DP</span><i>→</i></a><a class="rail-link" href="dp-grid.html"><span>网格 DP</span><i>→</i></a><a class="rail-link" href="dp-string.html"><span>字符串 DP</span><i>→</i></a><a class="rail-link" href="dp-stock.html"><span>股票买卖 DP</span><i>→</i></a>
+      </div>
+      <div class="rail-card">
+        <h3>快速跳转</h3>
+        <a class="rail-link" href="../templates.html"><span>全部模板</span><i>→</i></a>
+        <a class="rail-link" href="../index.html"><span>题库导航</span><i>→</i></a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-brand">模板 · LEETCODE</p>
+    <p>基于《面试经典 150 题》整理 · 代码以 Python 3 书写 · 静态站点，可离线阅读</p>
+  </div>
+</footer>
+<script src="../assets/app.js"></script>
+</body>
+</html>

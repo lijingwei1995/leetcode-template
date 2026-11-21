@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>查找和最小的 K 对数字 · LeetCode 模板手册</title>
+<meta name="description" content="给定两个以升序排列的整数数组 nums1 和 nums2，以及一个整数 k，返回和最小的 k 个数对 (u, v)，其中 u 来自 nums1，v 来自 nums2。数对顺序按和从小到大排列。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b1f1d'/%3E%3Cpath d='M9 9h14M16 9v14' stroke='%23f0ead9' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="LeetCode 模板手册">
+      <span class="brand-mark"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-text">模板<span class="dot">·</span>LEETCODE</span>
+    </a>
+    <nav class="nav"><a class="nav-link active" href="../index.html">题库导航</a><a class="nav-link" href="../templates.html">模板手册</a>
+      <a class="nav-link nav-ext" href="../../%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8%20150%20%E9%A2%98%20-%20%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92%20-%20%E5%8A%9B%E6%89%A3%EF%BC%88LeetCode%EF%BC%89%E5%85%A8%E7%90%83%E6%9E%81%E5%AE%A2%E6%8C%9A%E7%88%B1%E7%9A%84%E6%8A%80%E6%9C%AF%E6%88%90%E9%95%BF%E5%B9%B3%E5%8F%B0.html" target="_blank" rel="noopener">原题计划 <span class="up">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container crumbs"><a href="../index.html">题库导航</a><span>/</span>堆<span>/</span><span>查找和最小的 K 对数字</span></div>
+
+  <header class="container page-head">
+    <p class="page-kicker">No.123 · 堆</p>
+    <h1>查找和最小的 K 对数字</h1>
+    <div class="meta-row">
+      <span class="pill pill-medium">中等</span>
+      <a class="meta-link" href="https://leetcode.cn/problems/find-k-pairs-with-smallest-sums/" target="_blank" rel="noopener">LeetCode 原题 <span class="up">↗</span></a>
+    </div>
+    <div class="tpl-row"><a class="tpl-block" href="../templates/heap-topk.html"><span class="tpl-block-role">主模板</span><strong>堆与 TopK</strong><span class="arrow">→</span></a></div>
+  </header>
+
+  <div class="container problem-layout">
+    <article class="prose">
+      <section id="statement">
+        <h2>题目</h2>
+        <p class="statement-p">给定两个以升序排列的整数数组 nums1 和 nums2，以及一个整数 k，返回和最小的 k 个数对 (u, v)，其中 u 来自 nums1，v 来自 nums2。数对顺序按和从小到大排列。</p>
+        <div class="examples"><div class="example"><div class="ex-head">示例 1</div><div class="ex-row"><span>输入</span><code>nums1 = [1,7,11], nums2 = [2,4,6], k = 3</code></div><div class="ex-row"><span>输出</span><code>[[1,2],[1,4],[1,6]]</code></div></div><div class="example"><div class="ex-head">示例 2</div><div class="ex-row"><span>输入</span><code>nums1 = [1,1,2], nums2 = [1,2,3], k = 2</code></div><div class="ex-row"><span>输出</span><code>[[1,1],[1,1]]</code></div></div></div>
+      </section>
+
+      <section id="idea">
+        <h2>思路</h2>
+        <p class="lead-p">数对 (i, j) 的最小后继是 (i, j+1)：把每行（固定 i）的首数对放入小顶堆，弹出谁就推进谁的同行下一列，类似多路归并。变化点在于堆元素存 (和, i, j) 三元组，且 i 只需初始化前 k 行，更靠后的数对不可能进入前 k 小。</p>
+        <div class="path-line">
+          <span class="path-step">识别信号</span><i>→</i>
+          <span class="path-step">套用模板</span><i>→</i>
+          <span class="path-step">调整变化点</span>
+        </div>
+      </section>
+
+      <section id="code">
+        <h2>模板解法</h2>
+        <div class="code-card">
+          <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-lang">Python 3</span><button class="copy-btn" data-copy type="button">复制代码</button></div>
+          <pre class="code-body"><span class="cl"><span class="ln">1</span><span class="lt"><span class="tok-kw">import</span> heapq</span></span><span class="cl"><span class="ln">2</span><span class="lt">&nbsp;</span></span><span class="cl"><span class="ln">3</span><span class="lt"><span class="tok-kw">class</span> Solution:</span></span><span class="cl"><span class="ln">4</span><span class="lt">    <span class="tok-kw">def</span> <span class="tok-fn">kSmallestPairs</span>(self, nums1, nums2, k):</span></span><span class="cl"><span class="ln">5</span><span class="lt">        heap = []</span></span><span class="cl hl"><span class="ln">6</span><span class="lt">        <span class="tok-kw">for</span> i <span class="tok-kw">in</span> <span class="tok-bi">range</span>(<span class="tok-bi">min</span>(k, <span class="tok-bi">len</span>(nums1))):     <span class="tok-cmt"># 变化点: 只取前 k 行的首数对建堆</span></span></span><span class="cl"><span class="ln">7</span><span class="lt">            heapq.<span class="tok-bi">heappush</span>(heap, (nums1[i] + nums2[<span class="tok-num">0</span>], i, <span class="tok-num">0</span>))</span></span><span class="cl"><span class="ln">8</span><span class="lt">        res = []</span></span><span class="cl"><span class="ln">9</span><span class="lt">        <span class="tok-kw">while</span> heap <span class="tok-kw">and</span> <span class="tok-bi">len</span>(res) &lt; k:</span></span><span class="cl"><span class="ln">10</span><span class="lt">            s, i, j = heapq.<span class="tok-bi">heappop</span>(heap)</span></span><span class="cl"><span class="ln">11</span><span class="lt">            res.<span class="tok-fn">append</span>([nums1[i], nums2[j]])</span></span><span class="cl hl"><span class="ln">12</span><span class="lt">            <span class="tok-kw">if</span> j + <span class="tok-num">1</span> &lt; <span class="tok-bi">len</span>(nums2):              <span class="tok-cmt"># 变化点: 弹出后推进同行的 j</span></span></span><span class="cl"><span class="ln">13</span><span class="lt">                heapq.<span class="tok-bi">heappush</span>(heap, (nums1[i] + nums2[j + <span class="tok-num">1</span>], i, j + <span class="tok-num">1</span>))</span></span><span class="cl"><span class="ln">14</span><span class="lt">        <span class="tok-kw">return</span> res</span></span></pre>
+        </div>
+        <h3 class="sub-h">变化点代码</h3>
+        <ul class="var-list"><li><span class="v-line">L6</span><p>只取前 k 行的首数对建堆</p></li><li><span class="v-line">L12</span><p>弹出后推进同行的 j</p></li></ul>
+      </section>
+
+      <section id="pitfalls">
+        <h2>易错点</h2>
+        <ul class="pitfall-list"><li><span>01</span><p>堆中存 (和, i, j)，弹出后只推进 j + 1，i 方向的覆盖靠初始建堆</p></li><li><span>02</span><p>i 只初始化到 min(k, len(nums1))，后面行的首数对不可能进前 k 小</p></li><li><span>03</span><p>数对按位置计数，相同值不同下标的数对（如 [1,1] 与 [1,1]）都要保留</p></li></ul>
+      </section>
+
+      <section id="complexity">
+        <h2>复杂度</h2>
+        <div class="complexity-grid">
+          <div><span>时间复杂度</span><strong>O(k log k)</strong></div>
+          <div><span>空间复杂度</span><strong>O(k)</strong></div>
+        </div>
+      </section>
+
+      <div class="pager"><a class="pager-link prev" href="ipo.html"><span>上一题</span><strong>IPO</strong></a><a class="pager-link next" href="find-median-from-data-stream.html"><span>下一题</span><strong>数据流的中位数</strong></a></div>
+    </article>
+
+    <aside class="rail">
+      <div class="rail-card">
+        <h3>本页目录</h3>
+        <div class="toc"><a href="#statement">题目</a><a href="#idea">思路</a><a href="#code">模板解法</a><a href="#pitfalls">易错点</a><a href="#complexity">复杂度</a></div>
+      </div>
+      <div class="rail-card">
+        <h3>本题模板</h3>
+        <a class="tpl-block" href="../templates/heap-topk.html"><span class="tpl-block-role">主模板</span><strong>堆与 TopK</strong><span class="arrow">→</span></a>
+      </div>
+      <div class="rail-card">
+        <h3>同模板题目</h3>
+        <a class="rail-link" href="kth-largest-element-in-an-array.html"><span>121 数组中的第K个最大元素</span><i>→</i></a><a class="rail-link" href="ipo.html"><span>122 IPO</span><i>→</i></a><a class="rail-link" href="find-median-from-data-stream.html"><span>124 数据流的中位数</span><i>→</i></a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-brand">模板 · LEETCODE</p>
+    <p>基于《面试经典 150 题》整理 · 代码以 Python 3 书写 · 静态站点，可离线阅读</p>
+  </div>
+</footer>
+<script src="../assets/app.js"></script>
+</body>
+</html>

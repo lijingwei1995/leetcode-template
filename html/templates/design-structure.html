@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>数据结构设计 · 模板 · LeetCode 模板手册</title>
+<meta name="description" content="先看每个操作的时间要求，再组合基础结构。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b1f1d'/%3E%3Cpath d='M9 9h14M16 9v14' stroke='%23f0ead9' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="LeetCode 模板手册">
+      <span class="brand-mark"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-text">模板<span class="dot">·</span>LEETCODE</span>
+    </a>
+    <nav class="nav"><a class="nav-link" href="../index.html">题库导航</a><a class="nav-link active" href="../templates.html">模板手册</a>
+      <a class="nav-link nav-ext" href="../../%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8%20150%20%E9%A2%98%20-%20%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92%20-%20%E5%8A%9B%E6%89%A3%EF%BC%88LeetCode%EF%BC%89%E5%85%A8%E7%90%83%E6%9E%81%E5%AE%A2%E6%8C%9A%E7%88%B1%E7%9A%84%E6%8A%80%E6%9C%AF%E6%88%90%E9%95%BF%E5%B9%B3%E5%8F%B0.html" target="_blank" rel="noopener">原题计划 <span class="up">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container crumbs"><a href="../templates.html">模板手册</a><span>/</span>栈·链表·设计<span>/</span><span>数据结构设计</span></div>
+  <header class="container page-head tpl-head">
+    <p class="page-kicker">栈·链表·设计 · TEMPLATE</p>
+    <h1>数据结构设计</h1>
+    <p class="lede">先看每个操作的时间要求，再组合基础结构。</p>
+    <div class="meta-row">
+      <span class="pill pill-plain">3 道题</span>
+      <span class="pill pill-plain">视操作而定，通常 O(1)</span>
+    </div>
+  </header>
+
+  <div class="container tpl-layout">
+    <article class="prose">
+      <section>
+        <h2>核心思路</h2>
+        <p class="lead-p">设计题先列出各操作复杂度，再选组合：哈希 + 数组支持 O(1) 随机，哈希 + 双向链表支持 LRU，辅助栈支持最小栈，双堆支持中位数。</p>
+        <div class="callout"><span class="callout-mark">!</span><p>本模板在题库中关联 3 道题，其中 1 道以它为主模板。先判断题型，再动手写代码。</p></div>
+      </section>
+
+      <section>
+        <h2>识别信号</h2>
+        <p>看到下面这些特征，优先想到这个模板；如果同时符合多个模板，再看哪一条约束最紧。</p>
+        <ol class="signal-list"><li><span>01</span>要求 O(1) 的插入 / 删除 / 随机</li><li><span>02</span>缓存淘汰、最小栈</li><li><span>03</span>数据流中位数、BST 迭代器</li></ol>
+      </section>
+
+      <section>
+        <h2>模板骨架</h2>
+        <div class="code-card">
+          <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-lang">Python 3</span><button class="copy-btn" data-copy type="button">复制代码</button></div>
+          <pre class="code-body"><span class="cl"><span class="ln">1</span><span class="lt"><span class="tok-kw">class</span> Foo:</span></span><span class="cl"><span class="ln">2</span><span class="lt">    <span class="tok-kw">def</span> <span class="tok-fn">__init__</span>(self):</span></span><span class="cl hl"><span class="ln">3</span><span class="lt">        self.data = {}         <span class="tok-cmt"># 变化点：组合哪些结构</span></span></span><span class="cl"><span class="ln">4</span><span class="lt">        self.cap = <span class="tok-num">0</span></span></span><span class="cl"><span class="ln">5</span><span class="lt">    <span class="tok-kw">def</span> <span class="tok-fn">op</span>(self, x):</span></span><span class="cl"><span class="ln">6</span><span class="lt">        ...</span></span></pre>
+        </div>
+        <p class="code-note">高亮行是应用时需要替换或调整的地方，下面逐条说明。</p>
+      </section>
+
+      <section>
+        <h2>变化点</h2>
+        <ul class="var-list"><li><span class="v-dot"></span><p>O(1) 随机集合：数组存值，哈希存值→下标，删除时与末尾交换</p></li><li><span class="v-dot"></span><p>最小栈：辅助栈同步保存当前最小值</p></li><li><span class="v-dot"></span><p>LRU：哈希表 + 双向链表，访问后移到头部</p></li><li><span class="v-dot"></span><p>中位数：大顶堆 + 小顶堆，保持大小平衡</p></li></ul>
+      </section>
+
+      <section>
+        <h2>适用题目</h2>
+        <div class="role-block"><span class="role-label">主模板 · 1 题</span><div class="mini-list"><a class="mini-row" href="../problems/insert-delete-getrandom-o1.html"><span class="mini-no">12</span><span class="mini-title">O(1) 时间插入、删除和获取随机元素</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a></div></div>
+        <div class="role-block"><span class="role-label">作为相关模板 · 2 题</span><div class="mini-list"><a class="mini-row" href="../problems/binary-search-tree-iterator.html"><span class="mini-no">79</span><span class="mini-title">二叉搜索树迭代器</span><span class="pill pill-medium">中等</span><span class="mini-role">相关</span></a><a class="mini-row" href="../problems/find-median-from-data-stream.html"><span class="mini-no">124</span><span class="mini-title">数据流的中位数</span><span class="pill pill-hard">困难</span><span class="mini-role">相关</span></a></div></div>
+      </section>
+
+      <section>
+        <h2>参考</h2>
+        <p class="ref-line">labuladong · LRU算法</p>
+      </section>
+    </article>
+
+    <aside class="rail">
+      <div class="rail-card">
+        <h3>模板信息</h3>
+        <dl class="rail-dl">
+          <div><dt>分组</dt><dd>栈·链表·设计</dd></div>
+          <div><dt>复杂度</dt><dd>视操作而定，通常 O(1)</dd></div>
+          <div><dt>主模板</dt><dd>1 题</dd></div>
+          <div><dt>相关引用</dt><dd>2 题</dd></div>
+        </dl>
+      </div>
+      <div class="rail-card">
+        <h3>同组模板</h3>
+        <a class="rail-link" href="stack-expression.html"><span>栈与表达式</span><i>→</i></a><a class="rail-link" href="linked-list-dummy.html"><span>链表哨兵与遍历</span><i>→</i></a><a class="rail-link" href="linked-list-reverse.html"><span>链表反转</span><i>→</i></a>
+      </div>
+      <div class="rail-card">
+        <h3>快速跳转</h3>
+        <a class="rail-link" href="../templates.html"><span>全部模板</span><i>→</i></a>
+        <a class="rail-link" href="../index.html"><span>题库导航</span><i>→</i></a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-brand">模板 · LEETCODE</p>
+    <p>基于《面试经典 150 题》整理 · 代码以 Python 3 书写 · 静态站点，可离线阅读</p>
+  </div>
+</footer>
+<script src="../assets/app.js"></script>
+</body>
+</html>

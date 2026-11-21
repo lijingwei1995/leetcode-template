@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>O(1) 时间插入、删除和获取随机元素 · LeetCode 模板手册</title>
+<meta name="description" content="实现 RandomizedSet 类：insert(val) 在元素不存在时向集合中插入该项并返回 true，否则返回 false；remove(val) 在元素存在时移除该项并返回 true，否则返回 false；getRandom() 等概率随机返回集合中的任意一项。要求每个函数的平均时间复杂度为 O(1)。集合中每个元素最多出现一次。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b1f1d'/%3E%3Cpath d='M9 9h14M16 9v14' stroke='%23f0ead9' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="LeetCode 模板手册">
+      <span class="brand-mark"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-text">模板<span class="dot">·</span>LEETCODE</span>
+    </a>
+    <nav class="nav"><a class="nav-link active" href="../index.html">题库导航</a><a class="nav-link" href="../templates.html">模板手册</a>
+      <a class="nav-link nav-ext" href="../../%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8%20150%20%E9%A2%98%20-%20%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92%20-%20%E5%8A%9B%E6%89%A3%EF%BC%88LeetCode%EF%BC%89%E5%85%A8%E7%90%83%E6%9E%81%E5%AE%A2%E6%8C%9A%E7%88%B1%E7%9A%84%E6%8A%80%E6%9C%AF%E6%88%90%E9%95%BF%E5%B9%B3%E5%8F%B0.html" target="_blank" rel="noopener">原题计划 <span class="up">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container crumbs"><a href="../index.html">题库导航</a><span>/</span>数组 / 字符串<span>/</span><span>O(1) 时间插入、删除和获取随机元素</span></div>
+
+  <header class="container page-head">
+    <p class="page-kicker">No.12 · 数组 / 字符串</p>
+    <h1>O(1) 时间插入、删除和获取随机元素</h1>
+    <div class="meta-row">
+      <span class="pill pill-medium">中等</span>
+      <a class="meta-link" href="https://leetcode.cn/problems/insert-delete-getrandom-o1/" target="_blank" rel="noopener">LeetCode 原题 <span class="up">↗</span></a>
+    </div>
+    <div class="tpl-row"><a class="tpl-block" href="../templates/design-structure.html"><span class="tpl-block-role">主模板</span><strong>数据结构设计</strong><span class="arrow">→</span></a><a class="tpl-block" href="../templates/hash-map.html"><span class="tpl-block-role">相关模板</span><strong>哈希映射</strong><span class="arrow">→</span></a></div>
+  </header>
+
+  <div class="container problem-layout">
+    <article class="prose">
+      <section id="statement">
+        <h2>题目</h2>
+        <p class="statement-p">实现 RandomizedSet 类：insert(val) 在元素不存在时向集合中插入该项并返回 true，否则返回 false；remove(val) 在元素存在时移除该项并返回 true，否则返回 false；getRandom() 等概率随机返回集合中的任意一项。要求每个函数的平均时间复杂度为 O(1)。集合中每个元素最多出现一次。</p>
+        <div class="examples"><div class="example"><div class="ex-head">示例 1</div><div class="ex-row"><span>输入</span><code>insert(1)、remove(2)、insert(2)、getRandom()</code></div><div class="ex-row"><span>输出</span><code>true / false / true / 2（集合内为 [1,2]，各以 1/2 概率返回）</code></div></div><div class="example"><div class="ex-head">示例 2</div><div class="ex-row"><span>输入</span><code>remove(1)、insert(2)、getRandom()</code></div><div class="ex-row"><span>输出</span><code>true / false / 2</code></div></div></div>
+      </section>
+
+      <section id="idea">
+        <h2>思路</h2>
+        <p class="lead-p">要在 O(1) 内完成插入、删除与等概率随机取值，是“哈希映射 + 动态数组”的设计信号：字典负责 O(1) 定位，数组负责 O(1) 随机下标。删除时用尾元素覆盖被删位置再 pop，避免数组整体搬移。变化点在于“字典存值到下标映射 + 尾部覆盖删除”的组合，以及 getRandom 直接随机数组下标。</p>
+        <div class="path-line">
+          <span class="path-step">识别信号</span><i>→</i>
+          <span class="path-step">套用模板</span><i>→</i>
+          <span class="path-step">调整变化点</span>
+        </div>
+      </section>
+
+      <section id="code">
+        <h2>模板解法</h2>
+        <div class="code-card">
+          <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-lang">Python 3</span><button class="copy-btn" data-copy type="button">复制代码</button></div>
+          <pre class="code-body"><span class="cl"><span class="ln">1</span><span class="lt"><span class="tok-kw">import</span> random</span></span><span class="cl"><span class="ln">2</span><span class="lt">&nbsp;</span></span><span class="cl"><span class="ln">3</span><span class="lt"><span class="tok-kw">class</span> RandomizedSet:</span></span><span class="cl"><span class="ln">4</span><span class="lt">    <span class="tok-kw">def</span> <span class="tok-fn">__init__</span>(self):</span></span><span class="cl"><span class="ln">5</span><span class="lt">        self.vals = []</span></span><span class="cl hl"><span class="ln">6</span><span class="lt">        self.pos = {}                           <span class="tok-cmt"># 变化点: 哈希表存“值 -&gt; 数组下标”</span></span></span><span class="cl"><span class="ln">7</span><span class="lt">&nbsp;</span></span><span class="cl"><span class="ln">8</span><span class="lt">    <span class="tok-kw">def</span> <span class="tok-fn">insert</span>(self, val):</span></span><span class="cl"><span class="ln">9</span><span class="lt">        <span class="tok-kw">if</span> val <span class="tok-kw">in</span> self.pos:</span></span><span class="cl"><span class="ln">10</span><span class="lt">            <span class="tok-kw">return</span> <span class="tok-kw">False</span></span></span><span class="cl"><span class="ln">11</span><span class="lt">        self.pos[val] = <span class="tok-bi">len</span>(self.vals)</span></span><span class="cl"><span class="ln">12</span><span class="lt">        self.vals.<span class="tok-fn">append</span>(val)</span></span><span class="cl"><span class="ln">13</span><span class="lt">        <span class="tok-kw">return</span> <span class="tok-kw">True</span></span></span><span class="cl"><span class="ln">14</span><span class="lt">&nbsp;</span></span><span class="cl"><span class="ln">15</span><span class="lt">    <span class="tok-kw">def</span> <span class="tok-fn">remove</span>(self, val):</span></span><span class="cl"><span class="ln">16</span><span class="lt">        <span class="tok-kw">if</span> val <span class="tok-kw">not</span> <span class="tok-kw">in</span> self.pos:</span></span><span class="cl"><span class="ln">17</span><span class="lt">            <span class="tok-kw">return</span> <span class="tok-kw">False</span></span></span><span class="cl"><span class="ln">18</span><span class="lt">        i = self.pos[val]</span></span><span class="cl hl"><span class="ln">19</span><span class="lt">        last = self.vals[-<span class="tok-num">1</span>]                    <span class="tok-cmt"># 变化点: 用尾元素覆盖被删位置，O(1) 删除</span></span></span><span class="cl"><span class="ln">20</span><span class="lt">        self.vals[i] = last</span></span><span class="cl"><span class="ln">21</span><span class="lt">        self.pos[last] = i</span></span><span class="cl"><span class="ln">22</span><span class="lt">        self.vals.<span class="tok-fn">pop</span>()</span></span><span class="cl"><span class="ln">23</span><span class="lt">        <span class="tok-kw">del</span> self.pos[val]</span></span><span class="cl"><span class="ln">24</span><span class="lt">        <span class="tok-kw">return</span> <span class="tok-kw">True</span></span></span><span class="cl"><span class="ln">25</span><span class="lt">&nbsp;</span></span><span class="cl"><span class="ln">26</span><span class="lt">    <span class="tok-kw">def</span> <span class="tok-fn">getRandom</span>(self):</span></span><span class="cl hl"><span class="ln">27</span><span class="lt">        <span class="tok-kw">return</span> random.<span class="tok-fn">choice</span>(self.vals)         <span class="tok-cmt"># 变化点: 随机数组下标即等概率</span></span></span></pre>
+        </div>
+        <h3 class="sub-h">变化点代码</h3>
+        <ul class="var-list"><li><span class="v-line">L6</span><p>哈希表存“值 -&gt; 数组下标”</p></li><li><span class="v-line">L19</span><p>用尾元素覆盖被删位置，O(1) 删除</p></li><li><span class="v-line">L27</span><p>随机数组下标即等概率</p></li></ul>
+      </section>
+
+      <section id="pitfalls">
+        <h2>易错点</h2>
+        <ul class="pitfall-list"><li><span>01</span><p>删除被删值恰是尾元素时，覆盖与 pop 的顺序仍要先改 pos 再 del，否则映射残留</p></li><li><span>02</span><p>只靠哈希表做不到 O(1) 等概率随机，必须配合数组下标</p></li><li><span>03</span><p>本题 LeetCode 签名是 RandomizedSet 而非 Solution，提交时类名要一致</p></li></ul>
+      </section>
+
+      <section id="complexity">
+        <h2>复杂度</h2>
+        <div class="complexity-grid">
+          <div><span>时间复杂度</span><strong>各操作平均 O(1)</strong></div>
+          <div><span>空间复杂度</span><strong>O(n)</strong></div>
+        </div>
+      </section>
+
+      <div class="pager"><a class="pager-link prev" href="h-index.html"><span>上一题</span><strong>H 指数</strong></a><a class="pager-link next" href="product-of-array-except-self.html"><span>下一题</span><strong>除了自身以外数组的乘积</strong></a></div>
+    </article>
+
+    <aside class="rail">
+      <div class="rail-card">
+        <h3>本页目录</h3>
+        <div class="toc"><a href="#statement">题目</a><a href="#idea">思路</a><a href="#code">模板解法</a><a href="#pitfalls">易错点</a><a href="#complexity">复杂度</a></div>
+      </div>
+      <div class="rail-card">
+        <h3>本题模板</h3>
+        <a class="tpl-block" href="../templates/design-structure.html"><span class="tpl-block-role">主模板</span><strong>数据结构设计</strong><span class="arrow">→</span></a><a class="tpl-block" href="../templates/hash-map.html"><span class="tpl-block-role">相关模板</span><strong>哈希映射</strong><span class="arrow">→</span></a>
+      </div>
+      <div class="rail-card">
+        <h3>同模板题目</h3>
+        <a class="rail-link" href="binary-search-tree-iterator.html"><span>79 二叉搜索树迭代器</span><i>→</i></a><a class="rail-link" href="find-median-from-data-stream.html"><span>124 数据流的中位数</span><i>→</i></a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-brand">模板 · LEETCODE</p>
+    <p>基于《面试经典 150 题》整理 · 代码以 Python 3 书写 · 静态站点，可离线阅读</p>
+  </div>
+</footer>
+<script src="../assets/app.js"></script>
+</body>
+</html>

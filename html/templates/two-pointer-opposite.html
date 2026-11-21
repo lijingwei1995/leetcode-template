@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>对撞双指针 · 模板 · LeetCode 模板手册</title>
+<meta name="description" content="左右夹逼，每一步排除一个不可能的候选。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b1f1d'/%3E%3Cpath d='M9 9h14M16 9v14' stroke='%23f0ead9' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="LeetCode 模板手册">
+      <span class="brand-mark"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-text">模板<span class="dot">·</span>LEETCODE</span>
+    </a>
+    <nav class="nav"><a class="nav-link" href="../index.html">题库导航</a><a class="nav-link active" href="../templates.html">模板手册</a>
+      <a class="nav-link nav-ext" href="../../%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8%20150%20%E9%A2%98%20-%20%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92%20-%20%E5%8A%9B%E6%89%A3%EF%BC%88LeetCode%EF%BC%89%E5%85%A8%E7%90%83%E6%9E%81%E5%AE%A2%E6%8C%9A%E7%88%B1%E7%9A%84%E6%8A%80%E6%9C%AF%E6%88%90%E9%95%BF%E5%B9%B3%E5%8F%B0.html" target="_blank" rel="noopener">原题计划 <span class="up">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container crumbs"><a href="../templates.html">模板手册</a><span>/</span>指针与窗口<span>/</span><span>对撞双指针</span></div>
+  <header class="container page-head tpl-head">
+    <p class="page-kicker">指针与窗口 · TEMPLATE</p>
+    <h1>对撞双指针</h1>
+    <p class="lede">左右夹逼，每一步排除一个不可能的候选。</p>
+    <div class="meta-row">
+      <span class="pill pill-plain">7 道题</span>
+      <span class="pill pill-plain">O(n) 时间，O(1) 空间</span>
+    </div>
+  </header>
+
+  <div class="container tpl-layout">
+    <article class="prose">
+      <section>
+        <h2>核心思路</h2>
+        <p class="lead-p">left 与 right 从两端向中间收缩。每次根据当前状态决定移动哪一侧，并证明被排除的一侧不可能产生更优解。</p>
+        <div class="callout"><span class="callout-mark">!</span><p>本模板在题库中关联 7 道题，其中 7 道以它为主模板。先判断题型，再动手写代码。</p></div>
+      </section>
+
+      <section>
+        <h2>识别信号</h2>
+        <p>看到下面这些特征，优先想到这个模板；如果同时符合多个模板，再看哪一条约束最紧。</p>
+        <ol class="signal-list"><li><span>01</span>有序数组求两数之和 / 三数之和</li><li><span>02</span>两端向中间的最优值问题（面积、雨水）</li><li><span>03</span>回文判断或从后往前合并</li></ol>
+      </section>
+
+      <section>
+        <h2>模板骨架</h2>
+        <div class="code-card">
+          <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-lang">Python 3</span><button class="copy-btn" data-copy type="button">复制代码</button></div>
+          <pre class="code-body"><span class="cl"><span class="ln">1</span><span class="lt">left, right = <span class="tok-num">0</span>, <span class="tok-bi">len</span>(nums) - <span class="tok-num">1</span></span></span><span class="cl"><span class="ln">2</span><span class="lt"><span class="tok-kw">while</span> left &lt; right:</span></span><span class="cl hl"><span class="ln">3</span><span class="lt">    <span class="tok-kw">if</span> 满足条件:                 <span class="tok-cmt"># 变化点：移动哪一侧</span></span></span><span class="cl"><span class="ln">4</span><span class="lt">        left += <span class="tok-num">1</span></span></span><span class="cl"><span class="ln">5</span><span class="lt">    <span class="tok-kw">else</span>:</span></span><span class="cl"><span class="ln">6</span><span class="lt">        right -= <span class="tok-num">1</span></span></span></pre>
+        </div>
+        <p class="code-note">高亮行是应用时需要替换或调整的地方，下面逐条说明。</p>
+      </section>
+
+      <section>
+        <h2>变化点</h2>
+        <ul class="var-list"><li><span class="v-dot"></span><p>移动规则不同：和太小移 left，容器高度矮的一侧内移</p></li><li><span class="v-dot"></span><p>从后往前合并两个有序数组，避免覆盖未处理元素</p></li><li><span class="v-dot"></span><p>固定一个数后，在剩余区间做对撞双指针（三数之和）</p></li></ul>
+      </section>
+
+      <section>
+        <h2>适用题目</h2>
+        <div class="role-block"><span class="role-label">主模板 · 7 题</span><div class="mini-list"><a class="mini-row" href="../problems/merge-sorted-array.html"><span class="mini-no">01</span><span class="mini-title">合并两个有序数组</span><span class="pill pill-easy">简单</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/rotate-array.html"><span class="mini-no">06</span><span class="mini-title">轮转数组</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/trapping-rain-water.html"><span class="mini-no">16</span><span class="mini-title">接雨水</span><span class="pill pill-hard">困难</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/valid-palindrome.html"><span class="mini-no">25</span><span class="mini-title">验证回文串</span><span class="pill pill-easy">简单</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/two-sum-ii-input-array-is-sorted.html"><span class="mini-no">27</span><span class="mini-title">两数之和 II - 输入有序数组</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/container-with-most-water.html"><span class="mini-no">28</span><span class="mini-title">盛最多水的容器</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/3sum.html"><span class="mini-no">29</span><span class="mini-title">三数之和</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a></div></div>
+        
+      </section>
+
+      <section>
+        <h2>参考</h2>
+        <p class="ref-line">labuladong · 双指针技巧</p>
+      </section>
+    </article>
+
+    <aside class="rail">
+      <div class="rail-card">
+        <h3>模板信息</h3>
+        <dl class="rail-dl">
+          <div><dt>分组</dt><dd>指针与窗口</dd></div>
+          <div><dt>复杂度</dt><dd>O(n) 时间，O(1) 空间</dd></div>
+          <div><dt>主模板</dt><dd>7 题</dd></div>
+          <div><dt>相关引用</dt><dd>0 题</dd></div>
+        </dl>
+      </div>
+      <div class="rail-card">
+        <h3>同组模板</h3>
+        <a class="rail-link" href="two-pointer-same.html"><span>同向双指针（读写指针）</span><i>→</i></a><a class="rail-link" href="fast-slow.html"><span>快慢指针</span><i>→</i></a><a class="rail-link" href="sliding-window.html"><span>滑动窗口</span><i>→</i></a><a class="rail-link" href="prefix-decomposition.html"><span>前缀 / 后缀分解</span><i>→</i></a>
+      </div>
+      <div class="rail-card">
+        <h3>快速跳转</h3>
+        <a class="rail-link" href="../templates.html"><span>全部模板</span><i>→</i></a>
+        <a class="rail-link" href="../index.html"><span>题库导航</span><i>→</i></a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-brand">模板 · LEETCODE</p>
+    <p>基于《面试经典 150 题》整理 · 代码以 Python 3 书写 · 静态站点，可离线阅读</p>
+  </div>
+</footer>
+<script src="../assets/app.js"></script>
+</body>
+</html>

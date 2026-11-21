@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>二叉树递归 · 模板 · LeetCode 模板手册</title>
+<meta name="description" content="先定义 dfs 返回值的语义，再决定前序还是后序处理。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b1f1d'/%3E%3Cpath d='M9 9h14M16 9v14' stroke='%23f0ead9' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="LeetCode 模板手册">
+      <span class="brand-mark"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-text">模板<span class="dot">·</span>LEETCODE</span>
+    </a>
+    <nav class="nav"><a class="nav-link" href="../index.html">题库导航</a><a class="nav-link active" href="../templates.html">模板手册</a>
+      <a class="nav-link nav-ext" href="../../%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8%20150%20%E9%A2%98%20-%20%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92%20-%20%E5%8A%9B%E6%89%A3%EF%BC%88LeetCode%EF%BC%89%E5%85%A8%E7%90%83%E6%9E%81%E5%AE%A2%E6%8C%9A%E7%88%B1%E7%9A%84%E6%8A%80%E6%9C%AF%E6%88%90%E9%95%BF%E5%B9%B3%E5%8F%B0.html" target="_blank" rel="noopener">原题计划 <span class="up">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container crumbs"><a href="../templates.html">模板手册</a><span>/</span>树·图·搜索<span>/</span><span>二叉树递归</span></div>
+  <header class="container page-head tpl-head">
+    <p class="page-kicker">树·图·搜索 · TEMPLATE</p>
+    <h1>二叉树递归</h1>
+    <p class="lede">先定义 dfs 返回值的语义，再决定前序还是后序处理。</p>
+    <div class="meta-row">
+      <span class="pill pill-plain">12 道题</span>
+      <span class="pill pill-plain">O(n) 时间，O(h) 递归栈</span>
+    </div>
+  </header>
+
+  <div class="container tpl-layout">
+    <article class="prose">
+      <section>
+        <h2>核心思路</h2>
+        <p class="lead-p">二叉树问题几乎都能落到“递归左右子树”上。明确 dfs 返回什么（高度、和、是否存在、路径），需要跨子树信息时用全局变量或返回多个值。</p>
+        <div class="callout"><span class="callout-mark">!</span><p>本模板在题库中关联 12 道题，其中 12 道以它为主模板。先判断题型，再动手写代码。</p></div>
+      </section>
+
+      <section>
+        <h2>识别信号</h2>
+        <p>看到下面这些特征，优先想到这个模板；如果同时符合多个模板，再看哪一条约束最紧。</p>
+        <ol class="signal-list"><li><span>01</span>求深度、节点数、路径</li><li><span>02</span>判断相同 / 对称 / 平衡</li><li><span>03</span>构造树、最近公共祖先、最大路径和</li></ol>
+      </section>
+
+      <section>
+        <h2>模板骨架</h2>
+        <div class="code-card">
+          <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-lang">Python 3</span><button class="copy-btn" data-copy type="button">复制代码</button></div>
+          <pre class="code-body"><span class="cl"><span class="ln">1</span><span class="lt"><span class="tok-kw">def</span> <span class="tok-fn">dfs</span>(node):</span></span><span class="cl"><span class="ln">2</span><span class="lt">    <span class="tok-kw">if</span> <span class="tok-kw">not</span> node:</span></span><span class="cl hl"><span class="ln">3</span><span class="lt">        <span class="tok-kw">return</span> <span class="tok-num">0</span>                <span class="tok-cmt"># 变化点：空节点返回值</span></span></span><span class="cl"><span class="ln">4</span><span class="lt">    left = <span class="tok-fn">dfs</span>(node.left)</span></span><span class="cl"><span class="ln">5</span><span class="lt">    right = <span class="tok-fn">dfs</span>(node.right)</span></span><span class="cl hl"><span class="ln">6</span><span class="lt">    <span class="tok-kw">return</span> <span class="tok-num">1</span> + <span class="tok-bi">max</span>(left, right) <span class="tok-cmt"># 变化点：后序汇合逻辑</span></span></span></pre>
+        </div>
+        <p class="code-note">高亮行是应用时需要替换或调整的地方，下面逐条说明。</p>
+      </section>
+
+      <section>
+        <h2>变化点</h2>
+        <ul class="var-list"><li><span class="v-dot"></span><p>求深度 / 节点数：返回单值累加</p></li><li><span class="v-dot"></span><p>路径和：向下传递剩余 target 或当前数字</p></li><li><span class="v-dot"></span><p>构造树：用下标哈希定位根，递归区间</p></li><li><span class="v-dot"></span><p>最大路径和：返回单边最大值，全局记录左右拐点</p></li><li><span class="v-dot"></span><p>LCA：左右都找到则当前节点为答案</p></li><li><span class="v-dot"></span><p>原地展开：先保存 right，再改指针</p></li></ul>
+      </section>
+
+      <section>
+        <h2>适用题目</h2>
+        <div class="role-block"><span class="role-label">主模板 · 12 题</span><div class="mini-list"><a class="mini-row" href="../problems/maximum-depth-of-binary-tree.html"><span class="mini-no">68</span><span class="mini-title">二叉树的最大深度</span><span class="pill pill-easy">简单</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/same-tree.html"><span class="mini-no">69</span><span class="mini-title">相同的树</span><span class="pill pill-easy">简单</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/invert-binary-tree.html"><span class="mini-no">70</span><span class="mini-title">翻转二叉树</span><span class="pill pill-easy">简单</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/symmetric-tree.html"><span class="mini-no">71</span><span class="mini-title">对称二叉树</span><span class="pill pill-easy">简单</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/construct-binary-tree-from-preorder-and-inorder-traversal.html"><span class="mini-no">72</span><span class="mini-title">从前序与中序遍历序列构造二叉树</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/construct-binary-tree-from-inorder-and-postorder-traversal.html"><span class="mini-no">73</span><span class="mini-title">从中序与后序遍历序列构造二叉树</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/flatten-binary-tree-to-linked-list.html"><span class="mini-no">75</span><span class="mini-title">二叉树展开为链表</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/path-sum.html"><span class="mini-no">76</span><span class="mini-title">路径总和</span><span class="pill pill-easy">简单</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/sum-root-to-leaf-numbers.html"><span class="mini-no">77</span><span class="mini-title">求根节点到叶节点数字之和</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/binary-tree-maximum-path-sum.html"><span class="mini-no">78</span><span class="mini-title">二叉树中的最大路径和</span><span class="pill pill-hard">困难</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/count-complete-tree-nodes.html"><span class="mini-no">80</span><span class="mini-title">完全二叉树的节点个数</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/lowest-common-ancestor-of-a-binary-tree.html"><span class="mini-no">81</span><span class="mini-title">二叉树的最近公共祖先</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a></div></div>
+        
+      </section>
+
+      <section>
+        <h2>参考</h2>
+        <p class="ref-line">labuladong · 二叉树系列1 / 二叉树总结</p>
+      </section>
+    </article>
+
+    <aside class="rail">
+      <div class="rail-card">
+        <h3>模板信息</h3>
+        <dl class="rail-dl">
+          <div><dt>分组</dt><dd>树·图·搜索</dd></div>
+          <div><dt>复杂度</dt><dd>O(n) 时间，O(h) 递归栈</dd></div>
+          <div><dt>主模板</dt><dd>12 题</dd></div>
+          <div><dt>相关引用</dt><dd>0 题</dd></div>
+        </dl>
+      </div>
+      <div class="rail-card">
+        <h3>同组模板</h3>
+        <a class="rail-link" href="tree-bst-inorder.html"><span>BST 中序遍历</span><i>→</i></a><a class="rail-link" href="bfs-level.html"><span>层序遍历（BFS）</span><i>→</i></a><a class="rail-link" href="grid-dfs.html"><span>网格 DFS / FloodFill</span><i>→</i></a><a class="rail-link" href="graph-bfs.html"><span>图 BFS / 最短步数</span><i>→</i></a><a class="rail-link" href="topo-sort.html"><span>拓扑排序</span><i>→</i></a><a class="rail-link" href="trie.html"><span>字典树</span><i>→</i></a><a class="rail-link" href="backtracking.html"><span>回溯框架</span><i>→</i></a>
+      </div>
+      <div class="rail-card">
+        <h3>快速跳转</h3>
+        <a class="rail-link" href="../templates.html"><span>全部模板</span><i>→</i></a>
+        <a class="rail-link" href="../index.html"><span>题库导航</span><i>→</i></a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-brand">模板 · LEETCODE</p>
+    <p>基于《面试经典 150 题》整理 · 代码以 Python 3 书写 · 静态站点，可离线阅读</p>
+  </div>
+</footer>
+<script src="../assets/app.js"></script>
+</body>
+</html>

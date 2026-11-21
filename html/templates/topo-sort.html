@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>拓扑排序 · 模板 · LeetCode 模板手册</title>
+<meta name="description" content="入度为 0 的先出队，能输出全部节点则无环。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b1f1d'/%3E%3Cpath d='M9 9h14M16 9v14' stroke='%23f0ead9' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="LeetCode 模板手册">
+      <span class="brand-mark"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-text">模板<span class="dot">·</span>LEETCODE</span>
+    </a>
+    <nav class="nav"><a class="nav-link" href="../index.html">题库导航</a><a class="nav-link active" href="../templates.html">模板手册</a>
+      <a class="nav-link nav-ext" href="../../%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8%20150%20%E9%A2%98%20-%20%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92%20-%20%E5%8A%9B%E6%89%A3%EF%BC%88LeetCode%EF%BC%89%E5%85%A8%E7%90%83%E6%9E%81%E5%AE%A2%E6%8C%9A%E7%88%B1%E7%9A%84%E6%8A%80%E6%9C%AF%E6%88%90%E9%95%BF%E5%B9%B3%E5%8F%B0.html" target="_blank" rel="noopener">原题计划 <span class="up">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container crumbs"><a href="../templates.html">模板手册</a><span>/</span>树·图·搜索<span>/</span><span>拓扑排序</span></div>
+  <header class="container page-head tpl-head">
+    <p class="page-kicker">树·图·搜索 · TEMPLATE</p>
+    <h1>拓扑排序</h1>
+    <p class="lede">入度为 0 的先出队，能输出全部节点则无环。</p>
+    <div class="meta-row">
+      <span class="pill pill-plain">0 道题</span>
+      <span class="pill pill-plain">O(V+E) 时间，O(V+E) 空间</span>
+    </div>
+  </header>
+
+  <div class="container tpl-layout">
+    <article class="prose">
+      <section>
+        <h2>核心思路</h2>
+        <p class="lead-p">根据依赖关系建有向图并统计入度，把入度为 0 的节点入队；逐个出队、删除其出边并更新入度。若最终输出数量等于节点数，则无环。</p>
+        <div class="callout"><span class="callout-mark">!</span><p>本模板在题库中关联 0 道题，其中 0 道以它为主模板。先判断题型，再动手写代码。</p></div>
+      </section>
+
+      <section>
+        <h2>识别信号</h2>
+        <p>看到下面这些特征，优先想到这个模板；如果同时符合多个模板，再看哪一条约束最紧。</p>
+        <ol class="signal-list"><li><span>01</span>课程安排 / 依赖顺序</li><li><span>02</span>判断有向图是否有环</li><li><span>03</span>输出一种可行顺序</li></ol>
+      </section>
+
+      <section>
+        <h2>模板骨架</h2>
+        <div class="code-card">
+          <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-lang">Python 3</span><button class="copy-btn" data-copy type="button">复制代码</button></div>
+          <pre class="code-body"><span class="cl"><span class="ln">1</span><span class="lt">indeg = [<span class="tok-num">0</span>] * n</span></span><span class="cl"><span class="ln">2</span><span class="lt">graph = [[] <span class="tok-kw">for</span> _ <span class="tok-kw">in</span> <span class="tok-bi">range</span>(n)]</span></span><span class="cl"><span class="ln">3</span><span class="lt"><span class="tok-kw">for</span> a, b <span class="tok-kw">in</span> prerequisites:</span></span><span class="cl"><span class="ln">4</span><span class="lt">    graph[b].<span class="tok-fn">append</span>(a)</span></span><span class="cl"><span class="ln">5</span><span class="lt">    indeg[a] += <span class="tok-num">1</span></span></span><span class="cl"><span class="ln">6</span><span class="lt">q = <span class="tok-bi">deque</span>([i <span class="tok-kw">for</span> i <span class="tok-kw">in</span> <span class="tok-bi">range</span>(n) <span class="tok-kw">if</span> indeg[i] == <span class="tok-num">0</span>])</span></span><span class="cl"><span class="ln">7</span><span class="lt">order = []</span></span><span class="cl"><span class="ln">8</span><span class="lt"><span class="tok-kw">while</span> q:</span></span><span class="cl"><span class="ln">9</span><span class="lt">    u = q.<span class="tok-fn">popleft</span>()</span></span><span class="cl"><span class="ln">10</span><span class="lt">    order.<span class="tok-fn">append</span>(u)</span></span><span class="cl"><span class="ln">11</span><span class="lt">    <span class="tok-kw">for</span> v <span class="tok-kw">in</span> graph[u]:</span></span><span class="cl hl"><span class="ln">12</span><span class="lt">        indeg[v] -= <span class="tok-num">1</span>          <span class="tok-cmt"># 变化点：入度归零时入队</span></span></span><span class="cl"><span class="ln">13</span><span class="lt">        <span class="tok-kw">if</span> indeg[v] == <span class="tok-num">0</span>:</span></span><span class="cl"><span class="ln">14</span><span class="lt">            q.<span class="tok-fn">append</span>(v)</span></span><span class="cl"><span class="ln">15</span><span class="lt"><span class="tok-kw">return</span> <span class="tok-bi">len</span>(order) == n</span></span></pre>
+        </div>
+        <p class="code-note">高亮行是应用时需要替换或调整的地方，下面逐条说明。</p>
+      </section>
+
+      <section>
+        <h2>变化点</h2>
+        <ul class="var-list"><li><span class="v-dot"></span><p>只判断能否完成：比较出队数量与 n</p></li><li><span class="v-dot"></span><p>输出拓扑序：记录出队顺序</p></li><li><span class="v-dot"></span><p>要求字典序最小：把队列换成最小堆</p></li></ul>
+      </section>
+
+      <section>
+        <h2>适用题目</h2>
+        <div class="role-block"><span class="role-label">主模板 · 0 题</span><div class="mini-list"></div></div>
+        
+      </section>
+
+      <section>
+        <h2>参考</h2>
+        <p class="ref-line">labuladong · 拓扑排序</p>
+      </section>
+    </article>
+
+    <aside class="rail">
+      <div class="rail-card">
+        <h3>模板信息</h3>
+        <dl class="rail-dl">
+          <div><dt>分组</dt><dd>树·图·搜索</dd></div>
+          <div><dt>复杂度</dt><dd>O(V+E) 时间，O(V+E) 空间</dd></div>
+          <div><dt>主模板</dt><dd>0 题</dd></div>
+          <div><dt>相关引用</dt><dd>0 题</dd></div>
+        </dl>
+      </div>
+      <div class="rail-card">
+        <h3>同组模板</h3>
+        <a class="rail-link" href="tree-recursion.html"><span>二叉树递归</span><i>→</i></a><a class="rail-link" href="tree-bst-inorder.html"><span>BST 中序遍历</span><i>→</i></a><a class="rail-link" href="bfs-level.html"><span>层序遍历（BFS）</span><i>→</i></a><a class="rail-link" href="grid-dfs.html"><span>网格 DFS / FloodFill</span><i>→</i></a><a class="rail-link" href="graph-bfs.html"><span>图 BFS / 最短步数</span><i>→</i></a><a class="rail-link" href="trie.html"><span>字典树</span><i>→</i></a><a class="rail-link" href="backtracking.html"><span>回溯框架</span><i>→</i></a>
+      </div>
+      <div class="rail-card">
+        <h3>快速跳转</h3>
+        <a class="rail-link" href="../templates.html"><span>全部模板</span><i>→</i></a>
+        <a class="rail-link" href="../index.html"><span>题库导航</span><i>→</i></a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-brand">模板 · LEETCODE</p>
+    <p>基于《面试经典 150 题》整理 · 代码以 Python 3 书写 · 静态站点，可离线阅读</p>
+  </div>
+</footer>
+<script src="../assets/app.js"></script>
+</body>
+</html>

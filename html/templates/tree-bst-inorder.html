@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BST 中序遍历 · 模板 · LeetCode 模板手册</title>
+<meta name="description" content="中序遍历天然升序，把 BST 问题变成序列问题。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b1f1d'/%3E%3Cpath d='M9 9h14M16 9v14' stroke='%23f0ead9' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="LeetCode 模板手册">
+      <span class="brand-mark"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-text">模板<span class="dot">·</span>LEETCODE</span>
+    </a>
+    <nav class="nav"><a class="nav-link" href="../index.html">题库导航</a><a class="nav-link active" href="../templates.html">模板手册</a>
+      <a class="nav-link nav-ext" href="../../%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8%20150%20%E9%A2%98%20-%20%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92%20-%20%E5%8A%9B%E6%89%A3%EF%BC%88LeetCode%EF%BC%89%E5%85%A8%E7%90%83%E6%9E%81%E5%AE%A2%E6%8C%9A%E7%88%B1%E7%9A%84%E6%8A%80%E6%9C%AF%E6%88%90%E9%95%BF%E5%B9%B3%E5%8F%B0.html" target="_blank" rel="noopener">原题计划 <span class="up">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container crumbs"><a href="../templates.html">模板手册</a><span>/</span>树·图·搜索<span>/</span><span>BST 中序遍历</span></div>
+  <header class="container page-head tpl-head">
+    <p class="page-kicker">树·图·搜索 · TEMPLATE</p>
+    <h1>BST 中序遍历</h1>
+    <p class="lede">中序遍历天然升序，把 BST 问题变成序列问题。</p>
+    <div class="meta-row">
+      <span class="pill pill-plain">4 道题</span>
+      <span class="pill pill-plain">O(n) 时间，O(h) 空间</span>
+    </div>
+  </header>
+
+  <div class="container tpl-layout">
+    <article class="prose">
+      <section>
+        <h2>核心思路</h2>
+        <p class="lead-p">中序访问顺序递增：第 k 小用计数器，最小绝对差比较相邻节点，验证 BST 检查是否严格递增；迭代器用显式栈模拟中序。</p>
+        <div class="callout"><span class="callout-mark">!</span><p>本模板在题库中关联 4 道题，其中 4 道以它为主模板。先判断题型，再动手写代码。</p></div>
+      </section>
+
+      <section>
+        <h2>识别信号</h2>
+        <p>看到下面这些特征，优先想到这个模板；如果同时符合多个模板，再看哪一条约束最紧。</p>
+        <ol class="signal-list"><li><span>01</span>第 k 小 / 最小差值</li><li><span>02</span>验证二叉搜索树</li><li><span>03</span>BST 迭代器</li></ol>
+      </section>
+
+      <section>
+        <h2>模板骨架</h2>
+        <div class="code-card">
+          <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-lang">Python 3</span><button class="copy-btn" data-copy type="button">复制代码</button></div>
+          <pre class="code-body"><span class="cl"><span class="ln">1</span><span class="lt"><span class="tok-kw">def</span> <span class="tok-fn">dfs</span>(node):</span></span><span class="cl"><span class="ln">2</span><span class="lt">    <span class="tok-kw">if</span> <span class="tok-kw">not</span> node:</span></span><span class="cl"><span class="ln">3</span><span class="lt">        <span class="tok-kw">return</span></span></span><span class="cl"><span class="ln">4</span><span class="lt">    <span class="tok-fn">dfs</span>(node.left)             <span class="tok-cmt"># 中序：升序</span></span></span><span class="cl hl"><span class="ln">5</span><span class="lt">    <span class="tok-fn">visit</span>(node.val)            <span class="tok-cmt"># 变化点：访问时的比较 / 计数</span></span></span><span class="cl"><span class="ln">6</span><span class="lt">    <span class="tok-fn">dfs</span>(node.right)</span></span></pre>
+        </div>
+        <p class="code-note">高亮行是应用时需要替换或调整的地方，下面逐条说明。</p>
+      </section>
+
+      <section>
+        <h2>变化点</h2>
+        <ul class="var-list"><li><span class="v-dot"></span><p>第 k 小：中序计数到 k 停止</p></li><li><span class="v-dot"></span><p>最小绝对差：维护 prev 节点</p></li><li><span class="v-dot"></span><p>验证 BST：中序严格递增，或递归传上下界</p></li><li><span class="v-dot"></span><p>迭代器：栈中存左链，next 时弹出并转向右子树</p></li></ul>
+      </section>
+
+      <section>
+        <h2>适用题目</h2>
+        <div class="role-block"><span class="role-label">主模板 · 4 题</span><div class="mini-list"><a class="mini-row" href="../problems/binary-search-tree-iterator.html"><span class="mini-no">79</span><span class="mini-title">二叉搜索树迭代器</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/minimum-absolute-difference-in-bst.html"><span class="mini-no">86</span><span class="mini-title">二叉搜索树的最小绝对差</span><span class="pill pill-easy">简单</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/kth-smallest-element-in-a-bst.html"><span class="mini-no">87</span><span class="mini-title">二叉搜索树中第 K 小的元素</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/validate-binary-search-tree.html"><span class="mini-no">88</span><span class="mini-title">验证二叉搜索树</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a></div></div>
+        
+      </section>
+
+      <section>
+        <h2>参考</h2>
+        <p class="ref-line">labuladong · BST1 / BST2</p>
+      </section>
+    </article>
+
+    <aside class="rail">
+      <div class="rail-card">
+        <h3>模板信息</h3>
+        <dl class="rail-dl">
+          <div><dt>分组</dt><dd>树·图·搜索</dd></div>
+          <div><dt>复杂度</dt><dd>O(n) 时间，O(h) 空间</dd></div>
+          <div><dt>主模板</dt><dd>4 题</dd></div>
+          <div><dt>相关引用</dt><dd>0 题</dd></div>
+        </dl>
+      </div>
+      <div class="rail-card">
+        <h3>同组模板</h3>
+        <a class="rail-link" href="tree-recursion.html"><span>二叉树递归</span><i>→</i></a><a class="rail-link" href="bfs-level.html"><span>层序遍历（BFS）</span><i>→</i></a><a class="rail-link" href="grid-dfs.html"><span>网格 DFS / FloodFill</span><i>→</i></a><a class="rail-link" href="graph-bfs.html"><span>图 BFS / 最短步数</span><i>→</i></a><a class="rail-link" href="topo-sort.html"><span>拓扑排序</span><i>→</i></a><a class="rail-link" href="trie.html"><span>字典树</span><i>→</i></a><a class="rail-link" href="backtracking.html"><span>回溯框架</span><i>→</i></a>
+      </div>
+      <div class="rail-card">
+        <h3>快速跳转</h3>
+        <a class="rail-link" href="../templates.html"><span>全部模板</span><i>→</i></a>
+        <a class="rail-link" href="../index.html"><span>题库导航</span><i>→</i></a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-brand">模板 · LEETCODE</p>
+    <p>基于《面试经典 150 题》整理 · 代码以 Python 3 书写 · 静态站点，可离线阅读</p>
+  </div>
+</footer>
+<script src="../assets/app.js"></script>
+</body>
+</html>

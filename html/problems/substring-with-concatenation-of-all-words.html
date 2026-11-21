@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>串联所有单词的子串 · LeetCode 模板手册</title>
+<meta name="description" content="给定一个字符串 s 和一个字符串数组 words，words 中所有字符串长度相同。串联子串是指一个包含 words 中所有字符串以任意顺序排列连接起来的子串，且每个字符串恰好出现一次（按 words 中的次数使用）。返回 s 中所有串联子串的起始索引，顺序不重要。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b1f1d'/%3E%3Cpath d='M9 9h14M16 9v14' stroke='%23f0ead9' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="LeetCode 模板手册">
+      <span class="brand-mark"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-text">模板<span class="dot">·</span>LEETCODE</span>
+    </a>
+    <nav class="nav"><a class="nav-link active" href="../index.html">题库导航</a><a class="nav-link" href="../templates.html">模板手册</a>
+      <a class="nav-link nav-ext" href="../../%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8%20150%20%E9%A2%98%20-%20%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92%20-%20%E5%8A%9B%E6%89%A3%EF%BC%88LeetCode%EF%BC%89%E5%85%A8%E7%90%83%E6%9E%81%E5%AE%A2%E6%8C%9A%E7%88%B1%E7%9A%84%E6%8A%80%E6%9C%AF%E6%88%90%E9%95%BF%E5%B9%B3%E5%8F%B0.html" target="_blank" rel="noopener">原题计划 <span class="up">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container crumbs"><a href="../index.html">题库导航</a><span>/</span>滑动窗口<span>/</span><span>串联所有单词的子串</span></div>
+
+  <header class="container page-head">
+    <p class="page-kicker">No.32 · 滑动窗口</p>
+    <h1>串联所有单词的子串</h1>
+    <div class="meta-row">
+      <span class="pill pill-hard">困难</span>
+      <a class="meta-link" href="https://leetcode.cn/problems/substring-with-concatenation-of-all-words/" target="_blank" rel="noopener">LeetCode 原题 <span class="up">↗</span></a>
+    </div>
+    <div class="tpl-row"><a class="tpl-block" href="../templates/sliding-window.html"><span class="tpl-block-role">主模板</span><strong>滑动窗口</strong><span class="arrow">→</span></a></div>
+  </header>
+
+  <div class="container problem-layout">
+    <article class="prose">
+      <section id="statement">
+        <h2>题目</h2>
+        <p class="statement-p">给定一个字符串 s 和一个字符串数组 words，words 中所有字符串长度相同。串联子串是指一个包含 words 中所有字符串以任意顺序排列连接起来的子串，且每个字符串恰好出现一次（按 words 中的次数使用）。返回 s 中所有串联子串的起始索引，顺序不重要。</p>
+        <div class="examples"><div class="example"><div class="ex-head">示例 1</div><div class="ex-row"><span>输入</span><code>s = "barfoothefoobarman", words = ["foo","bar"]</code></div><div class="ex-row"><span>输出</span><code>[0,9]</code></div></div><div class="example"><div class="ex-head">示例 2</div><div class="ex-row"><span>输入</span><code>s = "barfoofoobarthefoobarman", words = ["bar","foo","the"]</code></div><div class="ex-row"><span>输出</span><code>[6,9,12]</code></div></div></div>
+      </section>
+
+      <section id="idea">
+        <h2>思路</h2>
+        <p class="lead-p">窗口单位是等长单词而非字符，滑动窗口信号：以单词长度 wl 为步长、按 wl 个余数分通道滑动，哈希计数维护窗口内单词。超量的单词从左侧按单词粒度弹出。变化点在于按余数分 wl 条通道，命中条件是窗口跨度恰等于 wl × 单词数。</p>
+        <div class="path-line">
+          <span class="path-step">识别信号</span><i>→</i>
+          <span class="path-step">套用模板</span><i>→</i>
+          <span class="path-step">调整变化点</span>
+        </div>
+      </section>
+
+      <section id="code">
+        <h2>模板解法</h2>
+        <div class="code-card">
+          <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-lang">Python 3</span><button class="copy-btn" data-copy type="button">复制代码</button></div>
+          <pre class="code-body"><span class="cl"><span class="ln">1</span><span class="lt"><span class="tok-kw">class</span> Solution:</span></span><span class="cl"><span class="ln">2</span><span class="lt">    <span class="tok-kw">def</span> <span class="tok-fn">findSubstring</span>(self, s, words):</span></span><span class="cl"><span class="ln">3</span><span class="lt">        need = {}</span></span><span class="cl"><span class="ln">4</span><span class="lt">        <span class="tok-kw">for</span> w <span class="tok-kw">in</span> words:</span></span><span class="cl"><span class="ln">5</span><span class="lt">            need[w] = need.<span class="tok-fn">get</span>(w, <span class="tok-num">0</span>) + <span class="tok-num">1</span></span></span><span class="cl"><span class="ln">6</span><span class="lt">        wl, count = <span class="tok-bi">len</span>(words[<span class="tok-num">0</span>]), <span class="tok-bi">len</span>(words)</span></span><span class="cl"><span class="ln">7</span><span class="lt">        total = wl * count</span></span><span class="cl"><span class="ln">8</span><span class="lt">        result = []</span></span><span class="cl hl"><span class="ln">9</span><span class="lt">        <span class="tok-kw">for</span> offset <span class="tok-kw">in</span> <span class="tok-bi">range</span>(wl):                <span class="tok-cmt"># 变化点: 按余数分 wl 条滑动通道</span></span></span><span class="cl"><span class="ln">10</span><span class="lt">            left, have = offset, {}</span></span><span class="cl"><span class="ln">11</span><span class="lt">            <span class="tok-kw">for</span> right <span class="tok-kw">in</span> <span class="tok-bi">range</span>(offset, <span class="tok-bi">len</span>(s) - wl + <span class="tok-num">1</span>, wl):</span></span><span class="cl"><span class="ln">12</span><span class="lt">                word = s[right:right + wl]</span></span><span class="cl"><span class="ln">13</span><span class="lt">                have[word] = have.<span class="tok-fn">get</span>(word, <span class="tok-num">0</span>) + <span class="tok-num">1</span></span></span><span class="cl hl"><span class="ln">14</span><span class="lt">                <span class="tok-kw">while</span> have[word] &gt; need.<span class="tok-fn">get</span>(word, <span class="tok-num">0</span>):   <span class="tok-cmt"># 变化点: 超额单词从左侧按词粒度弹出</span></span></span><span class="cl"><span class="ln">15</span><span class="lt">                    left_word = s[left:left + wl]</span></span><span class="cl"><span class="ln">16</span><span class="lt">                    have[left_word] -= <span class="tok-num">1</span></span></span><span class="cl"><span class="ln">17</span><span class="lt">                    left += wl</span></span><span class="cl hl"><span class="ln">18</span><span class="lt">                <span class="tok-kw">if</span> right + wl - left == total:  <span class="tok-cmt"># 变化点: 窗口跨度恰等于单词总长即命中</span></span></span><span class="cl"><span class="ln">19</span><span class="lt">                    result.<span class="tok-fn">append</span>(left)</span></span><span class="cl"><span class="ln">20</span><span class="lt">        <span class="tok-kw">return</span> result</span></span></pre>
+        </div>
+        <h3 class="sub-h">变化点代码</h3>
+        <ul class="var-list"><li><span class="v-line">L9</span><p>按余数分 wl 条滑动通道</p></li><li><span class="v-line">L14</span><p>超额单词从左侧按词粒度弹出</p></li><li><span class="v-line">L18</span><p>窗口跨度恰等于单词总长即命中</p></li></ul>
+      </section>
+
+      <section id="pitfalls">
+        <h2>易错点</h2>
+        <ul class="pitfall-list"><li><span>01</span><p>必须按 wl 个余数分别起窗，只从下标 0 开始会漏掉对齐在其他余数上的解</p></li><li><span>02</span><p>words 里可能有重复单词，need 要累加计数而不是简单去重</p></li><li><span>03</span><p>右端上限是 len(s) - wl + 1，切片 s[right:right+wl] 才不会截到残缺词</p></li></ul>
+      </section>
+
+      <section id="complexity">
+        <h2>复杂度</h2>
+        <div class="complexity-grid">
+          <div><span>时间复杂度</span><strong>O(n·wl)（n 为 s 长度，wl 为单词长度）</strong></div>
+          <div><span>空间复杂度</span><strong>O(m·wl)（m 为 words 单词数）</strong></div>
+        </div>
+      </section>
+
+      <div class="pager"><a class="pager-link prev" href="longest-substring-without-repeating-characters.html"><span>上一题</span><strong>无重复字符的最长子串</strong></a><a class="pager-link next" href="minimum-window-substring.html"><span>下一题</span><strong>最小覆盖子串</strong></a></div>
+    </article>
+
+    <aside class="rail">
+      <div class="rail-card">
+        <h3>本页目录</h3>
+        <div class="toc"><a href="#statement">题目</a><a href="#idea">思路</a><a href="#code">模板解法</a><a href="#pitfalls">易错点</a><a href="#complexity">复杂度</a></div>
+      </div>
+      <div class="rail-card">
+        <h3>本题模板</h3>
+        <a class="tpl-block" href="../templates/sliding-window.html"><span class="tpl-block-role">主模板</span><strong>滑动窗口</strong><span class="arrow">→</span></a>
+      </div>
+      <div class="rail-card">
+        <h3>同模板题目</h3>
+        <a class="rail-link" href="minimum-size-subarray-sum.html"><span>30 长度最小的子数组</span><i>→</i></a><a class="rail-link" href="longest-substring-without-repeating-characters.html"><span>31 无重复字符的最长子串</span><i>→</i></a><a class="rail-link" href="minimum-window-substring.html"><span>33 最小覆盖子串</span><i>→</i></a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-brand">模板 · LEETCODE</p>
+    <p>基于《面试经典 150 题》整理 · 代码以 Python 3 书写 · 静态站点，可离线阅读</p>
+  </div>
+</footer>
+<script src="../assets/app.js"></script>
+</body>
+</html>

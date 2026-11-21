@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>二分边界与旋转数组 · 模板 · LeetCode 模板手册</title>
+<meta name="description" content="整体不有序，但每一轮都能判断哪一半可丢。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b1f1d'/%3E%3Cpath d='M9 9h14M16 9v14' stroke='%23f0ead9' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="LeetCode 模板手册">
+      <span class="brand-mark"><i></i><i></i><i></i><i></i></span>
+      <span class="brand-text">模板<span class="dot">·</span>LEETCODE</span>
+    </a>
+    <nav class="nav"><a class="nav-link" href="../index.html">题库导航</a><a class="nav-link active" href="../templates.html">模板手册</a>
+      <a class="nav-link nav-ext" href="../../%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8%20150%20%E9%A2%98%20-%20%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92%20-%20%E5%8A%9B%E6%89%A3%EF%BC%88LeetCode%EF%BC%89%E5%85%A8%E7%90%83%E6%9E%81%E5%AE%A2%E6%8C%9A%E7%88%B1%E7%9A%84%E6%8A%80%E6%9C%AF%E6%88%90%E9%95%BF%E5%B9%B3%E5%8F%B0.html" target="_blank" rel="noopener">原题计划 <span class="up">↗</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container crumbs"><a href="../templates.html">模板手册</a><span>/</span>查找·排序·贪心<span>/</span><span>二分边界与旋转数组</span></div>
+  <header class="container page-head tpl-head">
+    <p class="page-kicker">查找·排序·贪心 · TEMPLATE</p>
+    <h1>二分边界与旋转数组</h1>
+    <p class="lede">整体不有序，但每一轮都能判断哪一半可丢。</p>
+    <div class="meta-row">
+      <span class="pill pill-plain">5 道题</span>
+      <span class="pill pill-plain">O(log n) 时间，O(1) 空间</span>
+    </div>
+  </header>
+
+  <div class="container tpl-layout">
+    <article class="prose">
+      <section>
+        <h2>核心思路</h2>
+        <p class="lead-p">利用局部单调性构造判定：旋转数组先判断哪一侧有序；找最小值与右端点比较；找边界则做两次 lower_bound；两个有序数组中位数对短数组二分划分。</p>
+        <div class="callout"><span class="callout-mark">!</span><p>本模板在题库中关联 5 道题，其中 4 道以它为主模板。先判断题型，再动手写代码。</p></div>
+      </section>
+
+      <section>
+        <h2>识别信号</h2>
+        <p>看到下面这些特征，优先想到这个模板；如果同时符合多个模板，再看哪一条约束最紧。</p>
+        <ol class="signal-list"><li><span>01</span>旋转排序数组搜索 / 找最小值</li><li><span>02</span>第一个和最后一个位置</li><li><span>03</span>峰值问题、两个有序数组的中位数</li></ol>
+      </section>
+
+      <section>
+        <h2>模板骨架</h2>
+        <div class="code-card">
+          <div class="code-head"><span class="code-dots"><i></i><i></i><i></i></span><span class="code-lang">Python 3</span><button class="copy-btn" data-copy type="button">复制代码</button></div>
+          <pre class="code-body"><span class="cl"><span class="ln">1</span><span class="lt">left, right = <span class="tok-num">0</span>, <span class="tok-bi">len</span>(nums) - <span class="tok-num">1</span></span></span><span class="cl"><span class="ln">2</span><span class="lt"><span class="tok-kw">while</span> left &lt;= right:</span></span><span class="cl"><span class="ln">3</span><span class="lt">    mid = (left + right) // <span class="tok-num">2</span></span></span><span class="cl"><span class="ln">4</span><span class="lt">    <span class="tok-kw">if</span> nums[mid] == target:</span></span><span class="cl"><span class="ln">5</span><span class="lt">        <span class="tok-kw">return</span> mid</span></span><span class="cl hl"><span class="ln">6</span><span class="lt">    <span class="tok-kw">if</span> nums[left] &lt;= nums[mid]:      <span class="tok-cmt"># 变化点：判断有序侧</span></span></span><span class="cl"><span class="ln">7</span><span class="lt">        ...                           <span class="tok-cmt"># 在有序侧继续二分</span></span></span><span class="cl"><span class="ln">8</span><span class="lt">    <span class="tok-kw">else</span>:</span></span><span class="cl"><span class="ln">9</span><span class="lt">        ...                           <span class="tok-cmt"># 在另一侧继续二分</span></span></span></pre>
+        </div>
+        <p class="code-note">高亮行是应用时需要替换或调整的地方，下面逐条说明。</p>
+      </section>
+
+      <section>
+        <h2>变化点</h2>
+        <ul class="var-list"><li><span class="v-dot"></span><p>旋转数组：先判 left..mid 是否有序，再决定保留哪半</p></li><li><span class="v-dot"></span><p>找最小值 / 峰值：与右端点或相邻元素比较</p></li><li><span class="v-dot"></span><p>第一个和最后一个位置：两次 lower_bound</p></li><li><span class="v-dot"></span><p>两个数组中位数：对较短数组二分划分，使左右数量平衡</p></li></ul>
+      </section>
+
+      <section>
+        <h2>适用题目</h2>
+        <div class="role-block"><span class="role-label">主模板 · 4 题</span><div class="mini-list"><a class="mini-row" href="../problems/search-in-rotated-sorted-array.html"><span class="mini-no">117</span><span class="mini-title">搜索旋转排序数组</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/find-first-and-last-position-of-element-in-sorted-array.html"><span class="mini-no">118</span><span class="mini-title">在排序数组中查找元素的第一个和最后一个位置</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/find-minimum-in-rotated-sorted-array.html"><span class="mini-no">119</span><span class="mini-title">寻找旋转排序数组中的最小值</span><span class="pill pill-medium">中等</span><span class="mini-role">主模板</span></a><a class="mini-row" href="../problems/median-of-two-sorted-arrays.html"><span class="mini-no">120</span><span class="mini-title">寻找两个正序数组的中位数</span><span class="pill pill-hard">困难</span><span class="mini-role">主模板</span></a></div></div>
+        <div class="role-block"><span class="role-label">作为相关模板 · 1 题</span><div class="mini-list"><a class="mini-row" href="../problems/find-peak-element.html"><span class="mini-no">116</span><span class="mini-title">寻找峰值</span><span class="pill pill-medium">中等</span><span class="mini-role">相关</span></a></div></div>
+      </section>
+
+      <section>
+        <h2>参考</h2>
+        <p class="ref-line">labuladong · 二分查找详解</p>
+      </section>
+    </article>
+
+    <aside class="rail">
+      <div class="rail-card">
+        <h3>模板信息</h3>
+        <dl class="rail-dl">
+          <div><dt>分组</dt><dd>查找·排序·贪心</dd></div>
+          <div><dt>复杂度</dt><dd>O(log n) 时间，O(1) 空间</dd></div>
+          <div><dt>主模板</dt><dd>4 题</dd></div>
+          <div><dt>相关引用</dt><dd>1 题</dd></div>
+        </dl>
+      </div>
+      <div class="rail-card">
+        <h3>同组模板</h3>
+        <a class="rail-link" href="binary-search.html"><span>二分查找</span><i>→</i></a><a class="rail-link" href="interval-greedy.html"><span>区间贪心</span><i>→</i></a><a class="rail-link" href="greedy-linear.html"><span>线性贪心</span><i>→</i></a><a class="rail-link" href="heap-topk.html"><span>堆与 TopK</span><i>→</i></a><a class="rail-link" href="divide-conquer.html"><span>分治</span><i>→</i></a><a class="rail-link" href="kadane.html"><span>Kadane 算法</span><i>→</i></a>
+      </div>
+      <div class="rail-card">
+        <h3>快速跳转</h3>
+        <a class="rail-link" href="../templates.html"><span>全部模板</span><i>→</i></a>
+        <a class="rail-link" href="../index.html"><span>题库导航</span><i>→</i></a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-brand">模板 · LEETCODE</p>
+    <p>基于《面试经典 150 题》整理 · 代码以 Python 3 书写 · 静态站点，可离线阅读</p>
+  </div>
+</footer>
+<script src="../assets/app.js"></script>
+</body>
+</html>
